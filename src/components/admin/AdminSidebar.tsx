@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import {
   Camera,
   LayoutDashboard,
+  Home,
   Heart,
   MapPin,
   FileText,
@@ -25,6 +26,7 @@ import { useRouter } from 'next/navigation';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Startseite', href: '/admin/homepage', icon: Home },
   { name: 'Hochzeiten', href: '/admin/weddings', icon: Heart },
   { name: 'Locations', href: '/admin/locations', icon: MapPin },
   { name: 'Blog', href: '/admin/blog', icon: FileText },

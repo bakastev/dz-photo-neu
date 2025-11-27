@@ -4,31 +4,86 @@ import { Heart, MapPin, Camera, ArrowRight, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTracking } from '@/components/shared/TrackingProvider';
 
+// Icon mapping
+const iconMap: Record<string, any> = {
+  Heart, MapPin, Camera
+};
+
 interface ServicesSectionProps {
   data: {
-    wedding: {
+    sectionTitle?: string;
+    sectionTitleHighlight?: string;
+    description?: string;
+    services?: Array<{
+      id: string;
       title: string;
       description: string;
       icon: string;
       features: string[];
-    };
-    locations: {
+      gradient?: string;
+      borderColor?: string;
+      iconBg?: string;
+      link?: string;
+    }>;
+    ctaBox?: {
       title: string;
       description: string;
-      icon: string;
-      features: string[];
-    };
-    fotobox: {
-      title: string;
-      description: string;
-      icon: string;
-      features: string[];
+      buttonText: string;
     };
   };
 }
 
 export default function ServicesSection({ data }: ServicesSectionProps) {
   const { trackEvent } = useTracking();
+
+  // Defaults from database
+  const sectionTitle = data.sectionTitle || 'Meine';
+  const sectionTitleHighlight = data.sectionTitleHighlight || 'Services';
+  const description = data.description || 'Von der emotionalen Hochzeitsreportage bis zur professionellen Fotobox - ich biete Ihnen das komplette Paket für Ihren besonderen Tag.';
+  const ctaBox = data.ctaBox || {
+    title: 'Nicht sicher, welcher Service der richtige ist?',
+    description: 'Lassen Sie uns bei einem unverbindlichen Gespräch herausfinden, wie ich Ihren besonderen Tag perfekt festhalten kann.',
+    buttonText: 'Kostenlose Beratung'
+  };
+
+  // Default services if not provided
+  const defaultServices = [
+    {
+      id: 'wedding',
+      title: 'Hochzeitsfotografie',
+      description: 'Emotionale Momente Ihres besonderen Tages',
+      icon: 'Heart',
+      features: ['Ganztägige Begleitung', 'Professionelle Nachbearbeitung', 'Online-Galerie'],
+      gradient: 'from-red-500/20 to-pink-500/20',
+      borderColor: 'border-red-500/30',
+      iconBg: 'bg-red-500/10',
+      link: '/hochzeit'
+    },
+    {
+      id: 'locations',
+      title: 'Traumhafte Locations',
+      description: 'Die schönsten Hochzeitslocations in Oberösterreich',
+      icon: 'MapPin',
+      features: ['Location-Scouting', 'Beste Fotospots', 'Regionale Expertise'],
+      gradient: 'from-blue-500/20 to-cyan-500/20',
+      borderColor: 'border-blue-500/30',
+      iconBg: 'bg-blue-500/10',
+      link: '/locations'
+    },
+    {
+      id: 'fotobox',
+      title: 'Fotobox Services',
+      description: 'Unvergessliche Momente mit unserer Deluxe-Fotobox',
+      icon: 'Camera',
+      features: ['Sofortausdrucke', 'Online-Galerie', 'Accessoires inklusive'],
+      gradient: 'from-gold/20 to-gold-light/20',
+      borderColor: 'border-gold/30',
+      iconBg: 'bg-gold/10',
+      link: '/fotobox'
+    }
+  ];
+
+  const services = data.services && data.services.length > 0 ? data.services : defaultServices;
 
   const handleServiceClick = (serviceType: string, action: string) => {
     trackEvent('ServiceInteraction', { 
@@ -38,8 +93,9 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
     });
 
     if (action === 'learn_more') {
-      if (serviceType === 'fotobox') {
-        window.location.href = '/fotobox';
+      const service = services.find(s => s.id === serviceType);
+      if (service?.link) {
+        window.location.href = service.link;
       } else {
         const portfolioSection = document.getElementById('portfolio');
         portfolioSection?.scrollIntoView({ behavior: 'smooth' });
@@ -49,33 +105,6 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
       contactSection?.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
-  const services = [
-    {
-      ...data.wedding,
-      icon: Heart,
-      gradient: 'from-red-500/20 to-pink-500/20',
-      borderColor: 'border-red-500/30',
-      iconBg: 'bg-red-500/10',
-      type: 'wedding'
-    },
-    {
-      ...data.locations,
-      icon: MapPin,
-      gradient: 'from-blue-500/20 to-cyan-500/20',
-      borderColor: 'border-blue-500/30',
-      iconBg: 'bg-blue-500/10',
-      type: 'locations'
-    },
-    {
-      ...data.fotobox,
-      icon: Camera,
-      gradient: 'from-gold/20 to-gold-light/20',
-      borderColor: 'border-gold/30',
-      iconBg: 'bg-gold/10',
-      type: 'fotobox'
-    }
-  ];
 
   return (
     <section id="services" className="py-20 md:py-32 bg-dark-background relative overflow-hidden">
@@ -87,27 +116,26 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
         {/* Header */}
         <div className="text-center mb-16 reveal">
           <h2 className="section-title font-serif font-bold mb-6 text-white">
-            Meine <span className="text-gold">Services</span>
+            {sectionTitle} <span className="text-gold">{sectionTitleHighlight}</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Von der emotionalen Hochzeitsreportage bis zur professionellen Fotobox - 
-            ich biete Ihnen das komplette Paket für Ihren besonderen Tag.
+            {description}
           </p>
         </div>
 
         {/* Services Grid */}
         <div className="reveal grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {services.map((service, index) => {
-            const IconComponent = service.icon;
+            const IconComponent = iconMap[service.icon] || Heart;
             
             return (
               <div
-                key={service.type}
-                className={`glass-card rounded-3xl p-8 hover:scale-105 transition-all duration-500 border ${service.borderColor} group`}
+                key={service.id}
+                className={`glass-card rounded-3xl p-8 hover:scale-105 transition-all duration-500 border ${service.borderColor || 'border-white/10'} group`}
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
                 {/* Service Icon */}
-                <div className={`w-20 h-20 rounded-full ${service.iconBg} flex items-center justify-center mb-6 mx-auto liquid-glass-icon group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`w-20 h-20 rounded-full ${service.iconBg || 'bg-gold/10'} flex items-center justify-center mb-6 mx-auto liquid-glass-icon group-hover:scale-110 transition-transform duration-300`}>
                   <IconComponent className="w-10 h-10 text-gold" />
                 </div>
 
@@ -136,7 +164,7 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
                   <Button
                     variant="gold"
                     className="w-full group"
-                    onClick={() => handleServiceClick(service.type, 'learn_more')}
+                    onClick={() => handleServiceClick(service.id, 'learn_more')}
                   >
                     <span>Mehr erfahren</span>
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -145,14 +173,14 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
                   <Button
                     variant="gold-outline"
                     className="w-full"
-                    onClick={() => handleServiceClick(service.type, 'contact')}
+                    onClick={() => handleServiceClick(service.id, 'contact')}
                   >
                     Anfrage stellen
                   </Button>
                 </div>
 
                 {/* Decorative Gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10`} />
+                <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient || 'from-gold/20 to-gold-light/20'} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10`} />
               </div>
             );
           })}
@@ -162,11 +190,10 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
         <div className="text-center mt-16">
           <div className="reveal glass-card rounded-2xl p-8 max-w-2xl mx-auto">
             <h3 className="text-2xl font-serif font-bold text-white mb-4">
-              Nicht sicher, welcher Service der richtige ist?
+              {ctaBox.title}
             </h3>
             <p className="text-gray-300 mb-6">
-              Lassen Sie uns bei einem unverbindlichen Gespräch herausfinden, 
-              wie ich Ihren besonderen Tag perfekt festhalten kann.
+              {ctaBox.description}
             </p>
             <Button
               variant="gold"
@@ -175,7 +202,7 @@ export default function ServicesSection({ data }: ServicesSectionProps) {
               className="group"
             >
               <Heart className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-              Kostenlose Beratung
+              {ctaBox.buttonText}
             </Button>
           </div>
         </div>

@@ -31,33 +31,26 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  // Server-side data fetching
+  // Server-side data fetching - now fully from database
   const data = await getHomepageData();
   const schemaData = await generateHomepageSchema();
 
-  console.log('🏠 Homepage data:', {
+  console.log('🏠 Homepage data loaded from database:', {
     hasData: !!data,
+    sections: data ? Object.keys(data).filter(k => !['portfolio', 'fotobox', 'testimonials', 'blog'].includes(k)).length : 0,
     portfolioWeddings: data?.portfolio?.weddings?.length || 0,
     portfolioLocations: data?.portfolio?.locations?.length || 0,
     fotoboxServices: data?.fotobox?.length || 0,
     blogPosts: data?.blog?.length || 0,
     reviews: data?.testimonials?.length || 0
   });
-  
-  console.log('🔍 Homepage data structure check:');
-  console.log('  data.portfolio:', data?.portfolio);
-  console.log('  data.portfolio.weddings:', data?.portfolio?.weddings);
-  console.log('  data.portfolio.locations:', data?.portfolio?.locations);
-  console.log('  typeof data.portfolio:', typeof data?.portfolio);
-  console.log('  Array.isArray(data.portfolio.weddings):', Array.isArray(data?.portfolio?.weddings));
-  console.log('  Array.isArray(data.portfolio.locations):', Array.isArray(data?.portfolio?.locations));
 
   if (!data) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-dark-background">
         <div className="text-center text-white">
-          <h1>Fehler beim Laden der Daten</h1>
-          <p>Bitte versuchen Sie es später erneut.</p>
+          <h1 className="text-2xl font-bold mb-4">Fehler beim Laden der Daten</h1>
+          <p className="text-gray-400">Bitte versuchen Sie es später erneut.</p>
         </div>
       </div>
     );
@@ -72,20 +65,20 @@ export default async function HomePage() {
         <Navbar />
         
         <main>
-        {/* Homepage Sections mit IDs für Ankerlinks */}
-        <HeroSection data={data.hero} />
-        <AboutSection data={data.about} />
-        <ServicesSection data={data.services} />
-        <PortfolioSection data={data.portfolio} />
-        <FotoboxSection data={data.fotobox} />
-        <TestimonialsSection data={data.testimonials} />
-        <BlogSection data={data.blog} />
-        <FAQSection data={data.faq} />
-        <ContactSection data={data.contact} />
-      </main>
-      
-      <Footer />
-      <FloatingCTA />
+          {/* Homepage Sections - All content from database */}
+          <HeroSection data={data.hero} />
+          <AboutSection data={data.about} />
+          <ServicesSection data={data.services} />
+          <PortfolioSection data={data.portfolio} />
+          <FotoboxSection data={data.fotobox} />
+          <TestimonialsSection data={data.testimonials} />
+          <BlogSection data={data.blog} />
+          <FAQSection data={data.faq} />
+          <ContactSection data={data.contact} />
+        </main>
+        
+        <Footer />
+        <FloatingCTA />
       </ScrollRevealWrapper>
     </TrackingProvider>
   );

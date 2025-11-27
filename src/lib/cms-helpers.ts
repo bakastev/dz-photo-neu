@@ -1,130 +1,84 @@
 import { supabase } from './supabase';
 import type { Wedding, Location, BlogPost, FotoboxService, Review, Page } from './supabase';
 
-// Homepage Data Fetching
+// Helper to get section content from homepage_sections table
+async function getHomepageSections() {
+  const { data, error } = await supabase
+    .from('homepage_sections')
+    .select('section_key, content, enabled')
+    .eq('enabled', true)
+    .order('display_order');
+
+  if (error) {
+    console.error('❌ Error fetching homepage sections:', error);
+    return {};
+  }
+
+  // Convert array to object keyed by section_key
+  return (data || []).reduce((acc: Record<string, any>, section) => {
+    acc[section.section_key] = section.content;
+    return acc;
+  }, {});
+}
+
+// Homepage Data Fetching - Now fully dynamic from database
 export async function getHomepageData() {
   try {
     console.log('🔍 Fetching homepage data from Supabase...');
-    console.log('🔗 Supabase URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-    console.log('🔑 Supabase Key (first 20 chars):', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.substring(0, 20) + '...');
     
+    // Fetch all data in parallel
     const [
+      sections,
       { data: featuredWeddings, error: weddingsError },
       { data: locations, error: locationsError },
       { data: fotoboxServices, error: fotoboxError },
       { data: blogPosts, error: blogError },
-      { data: reviews, error: reviewsError },
-      { data: aboutData, error: aboutError }
+      { data: reviews, error: reviewsError }
     ] = await Promise.all([
+      getHomepageSections(),
       supabase.from('weddings').select('*').eq('featured', true).eq('published', true).limit(6),
       supabase.from('locations').select('*').eq('published', true).limit(8),
       supabase.from('fotobox_services').select('*').eq('published', true).limit(3),
       supabase.from('blog_posts').select('*').eq('published', true).order('published_at', { ascending: false }).limit(6),
-      supabase.from('reviews').select('*').eq('published', true).limit(6),
-      supabase.from('pages').select('*').eq('slug', 'ueber-mich').eq('published', true).limit(1)
+      supabase.from('reviews').select('*').eq('published', true).limit(6)
     ]);
 
-      // Detailed error logging
-      if (weddingsError) console.error('❌ Weddings error:', weddingsError);
-      if (locationsError) console.error('❌ Locations error:', locationsError);
-      if (fotoboxError) console.error('❌ Fotobox error:', fotoboxError);
-      if (blogError) console.error('❌ Blog error:', blogError);
-      if (reviewsError) console.error('❌ Reviews error:', reviewsError);
-      if (aboutError) console.error('❌ About error:', aboutError);
+    // Error logging
+    if (weddingsError) console.error('❌ Weddings error:', weddingsError);
+    if (locationsError) console.error('❌ Locations error:', locationsError);
+    if (fotoboxError) console.error('❌ Fotobox error:', fotoboxError);
+    if (blogError) console.error('❌ Blog error:', blogError);
+    if (reviewsError) console.error('❌ Reviews error:', reviewsError);
 
-      console.log('📊 Data fetched:', {
-        weddings: featuredWeddings && featuredWeddings.length || 0,
-        locations: (locations?.length ?? 0) || 0,
-        fotobox: (fotoboxServices?.length ?? 0) || 0,
-        blog: (blogPosts?.length ?? 0) || 0,
-        reviews: (reviews?.length ?? 0) || 0
-      });
-      
-      // Detailed data inspection
-      console.log('🔍 Sample data:');
-      if (featuredWeddings && featuredWeddings.length > 0) {
-        console.log('  Wedding sample:', {
-          id: featuredWeddings[0].id,
-          title: featuredWeddings[0].title,
-          featured: featuredWeddings[0].featured,
-          published: featuredWeddings[0].published
-        });
-      }
-      if (locations && ((locations?.length ?? 0) ?? 0) > 0) {
-        console.log('  Location sample:', {
-          id: locations[0].id,
-          name: locations[0].name,
-          published: locations[0].published
-        });
-      }
+    console.log('📊 Data fetched:', {
+      sections: Object.keys(sections).length,
+      weddings: featuredWeddings?.length || 0,
+      locations: locations?.length || 0,
+      fotobox: fotoboxServices?.length || 0,
+      blog: blogPosts?.length || 0,
+      reviews: reviews?.length || 0
+    });
 
     return {
-      hero: {
-        title: 'Professioneller Hochzeitsfotograf Oberösterreich',
-        subtitle: 'Daniel Zangerle',
-        description: 'Emotionale Hochzeitsreportagen, traumhafte Locations und professionelle Fotobox-Services',
-        ctaPrimary: 'Jetzt Termin anfragen',
-        ctaSecondary: 'Portfolio ansehen'
-      },
-      about: aboutData?.[0] || null,
-      services: {
-        wedding: { 
-          title: 'Hochzeitsfotografie', 
-          description: 'Emotionale Momente Ihres besonderen Tages',
-          icon: 'Heart',
-          features: ['Ganztägige Begleitung', 'Professionelle Nachbearbeitung', 'Online-Galerie']
-        },
-        locations: { 
-          title: 'Traumhafte Locations', 
-          description: 'Die schönsten Hochzeitslocations in Oberösterreich',
-          icon: 'MapPin',
-          features: ['Location-Scouting', 'Beste Fotospots', 'Regionale Expertise']
-        },
-        fotobox: { 
-          title: 'Fotobox Services', 
-          description: 'Unvergessliche Momente mit unserer Deluxe-Fotobox',
-          icon: 'Camera',
-          features: ['Sofortausdrucke', 'Online-Galerie', 'Accessoires inklusive']
-        }
-      },
+      // Section content from database
+      hero: sections.hero || {},
+      about: sections.about || {},
+      services: sections.services || {},
+      portfolioConfig: sections.portfolio || {},
+      fotoboxConfig: sections.fotobox || {},
+      testimonialsConfig: sections.testimonials || {},
+      blogConfig: sections.blog || {},
+      faq: sections.faq || {},
+      contact: sections.contact || {},
+      
+      // Dynamic data from content tables
       portfolio: { 
         weddings: featuredWeddings || [], 
         locations: locations || [] 
       },
       fotobox: fotoboxServices || [],
       testimonials: reviews || [],
-      blog: blogPosts || [],
-      faq: [
-        {
-          question: 'Wie weit im Voraus sollte ich buchen?',
-          answer: 'Idealerweise 6-12 Monate vor Ihrem Hochzeitstermin, besonders für beliebte Termine wie Samstage im Sommer.'
-        },
-        {
-          question: 'Was ist in meinem Hochzeitspaket enthalten?',
-          answer: 'Ganztägige Begleitung, professionelle Nachbearbeitung aller Bilder, Online-Galerie und Auswahl der schönsten Momente.'
-        },
-        {
-          question: 'Können wir ein Verlobungsshooting machen?',
-          answer: 'Ja, gerne! Ein Verlobungsshooting ist eine perfekte Gelegenheit, sich vor der Hochzeit kennenzulernen.'
-        },
-        {
-          question: 'Wie lange dauert die Bildbearbeitung?',
-          answer: 'In der Regel erhalten Sie Ihre fertig bearbeiteten Bilder 2-4 Wochen nach der Hochzeit.'
-        },
-        {
-          question: 'Arbeiten Sie auch außerhalb von Oberösterreich?',
-          answer: 'Ja, ich fotografiere gerne auch in ganz Österreich und darüber hinaus. Reisekosten werden individuell berechnet.'
-        }
-      ],
-      contact: {
-        phone: '+43 XXX XXX XXX',
-        email: 'info@dz-photo.at',
-        address: 'Oberösterreich, Wels & Umgebung',
-        socialMedia: {
-          instagram: 'https://instagram.com/dzphoto',
-          facebook: 'https://facebook.com/dzphoto'
-        }
-      }
+      blog: blogPosts || []
     };
   } catch (error) {
     console.error('Error fetching homepage data:', error);

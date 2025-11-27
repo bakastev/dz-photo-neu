@@ -5,6 +5,11 @@ import { ChevronDown, ChevronUp, HelpCircle, MessageCircle, Phone } from 'lucide
 import { Button } from '@/components/ui/button';
 import { useTracking } from '@/components/shared/TrackingProvider';
 
+// Icon mapping
+const iconMap: Record<string, any> = {
+  HelpCircle, MessageCircle, Phone
+};
+
 interface FAQItem {
   question: string;
   answer: string;
@@ -12,58 +17,48 @@ interface FAQItem {
 }
 
 interface FAQSectionProps {
-  data: FAQItem[];
+  data: {
+    sectionTitle?: string;
+    sectionTitleHighlight?: string;
+    description?: string;
+    badge?: {
+      text: string;
+      icon: string;
+    };
+    faqs?: FAQItem[];
+    quickStats?: Array<{
+      value: string;
+      label: string;
+      icon: string;
+    }>;
+    ctaBox?: {
+      title: string;
+      description: string;
+      buttonPrimary: string;
+      buttonSecondary: string;
+    };
+  };
 }
 
 export default function FAQSection({ data }: FAQSectionProps) {
   const [openItems, setOpenItems] = useState<number[]>([0]); // First item open by default
   const { trackEvent } = useTracking();
 
-  // Fallback FAQ data
-  const fallbackFAQs: FAQItem[] = [
-    {
-      question: 'Wie weit im Voraus sollte ich buchen?',
-      answer: 'Idealerweise sollten Sie 6-12 Monate vor Ihrem Hochzeitstermin buchen, besonders für beliebte Termine wie Samstage im Sommer. Für spontane Anfragen bin ich aber auch gerne da - kontaktieren Sie mich einfach!',
-      category: 'Buchung'
-    },
-    {
-      question: 'Was ist in meinem Hochzeitspaket enthalten?',
-      answer: 'Meine Hochzeitspakete beinhalten die ganztägige Begleitung (von den Vorbereitungen bis zum Hochzeitstanz), professionelle Nachbearbeitung aller Bilder, eine Online-Galerie für Sie und Ihre Gäste, sowie eine Auswahl der schönsten Momente als hochauflösende Downloads.',
-      category: 'Leistungen'
-    },
-    {
-      question: 'Können wir ein Verlobungsshooting machen?',
-      answer: 'Ja, sehr gerne! Ein Verlobungsshooting ist eine perfekte Gelegenheit, sich vor der Hochzeit kennenzulernen und entspannt vor der Kamera zu sein. Außerdem können wir die Bilder für Save-the-Date Karten oder Einladungen verwenden.',
-      category: 'Shootings'
-    },
-    {
-      question: 'Wie lange dauert die Bildbearbeitung?',
-      answer: 'In der Regel erhalten Sie Ihre fertig bearbeiteten Bilder 2-4 Wochen nach der Hochzeit. Bei besonderen Terminen oder in der Hochsaison kann es etwas länger dauern - ich informiere Sie aber immer über den aktuellen Stand.',
-      category: 'Nachbearbeitung'
-    },
-    {
-      question: 'Arbeiten Sie auch außerhalb von Oberösterreich?',
-      answer: 'Ja, ich fotografiere gerne auch in ganz Österreich und darüber hinaus. Für Hochzeiten außerhalb von Oberösterreich berechne ich zusätzlich die Anfahrtskosten - diese besprechen wir gerne individuell.',
-      category: 'Anfahrt'
-    },
-    {
-      question: 'Was passiert bei schlechtem Wetter?',
-      answer: 'Schlechtes Wetter ist kein Problem! Ich habe immer einen Plan B und kenne viele überdachte Locations. Oft entstehen bei Regen oder bewölktem Himmel sogar besonders romantische und stimmungsvolle Bilder.',
-      category: 'Wetter'
-    },
-    {
-      question: 'Können wir die Bilder auch für Social Media nutzen?',
-      answer: 'Selbstverständlich! Sie erhalten alle Bilder in hoher Auflösung und können diese für private Zwecke, Social Media und Ihre Hochzeitswebsite frei verwenden. Ich freue mich sogar über eine Verlinkung!',
-      category: 'Nutzungsrechte'
-    },
-    {
-      question: 'Wie funktioniert die Fotobox?',
-      answer: 'Unsere Fotobox ist kinderleicht zu bedienen! Ihre Gäste können selbstständig Fotos machen, die sofort ausgedruckt werden. Gleichzeitig werden alle Bilder in einer Online-Galerie gesammelt, die Sie nach der Hochzeit erhalten.',
-      category: 'Fotobox'
-    }
-  ];
+  // Use data from database with fallbacks
+  const sectionTitle = data.sectionTitle || 'Fragen &';
+  const sectionTitleHighlight = data.sectionTitleHighlight || 'Antworten';
+  const description = data.description || 'Die wichtigsten Fragen rund um Hochzeitsfotografie und unsere Services - schnell und übersichtlich beantwortet.';
+  const badge = data.badge || { text: 'Häufige Fragen', icon: 'HelpCircle' };
+  const faqs = data.faqs || [];
+  const quickStats = data.quickStats || [];
+  const ctaBox = data.ctaBox || {
+    title: 'Ihre Frage ist nicht dabei?',
+    description: 'Kein Problem! Kontaktieren Sie mich gerne direkt.',
+    buttonPrimary: 'Nachricht senden',
+    buttonSecondary: 'Anrufen'
+  };
 
-  const faqs = data.length > 0 ? data : fallbackFAQs;
+  const BadgeIcon = iconMap[badge.icon] || HelpCircle;
 
   const toggleItem = (index: number) => {
     setOpenItems(prev => {
@@ -72,7 +67,7 @@ export default function FAQSection({ data }: FAQSectionProps) {
       trackEvent('FAQToggle', { 
         section: 'faq', 
         question_index: index,
-        question: faqs[index].question,
+        question: faqs[index]?.question || '',
         action: isOpen ? 'close' : 'open'
       });
 
@@ -111,22 +106,21 @@ export default function FAQSection({ data }: FAQSectionProps) {
         {/* Header */}
         <div className="text-center mb-16 reveal">
           <div className="inline-flex items-center space-x-2 bg-purple-500/20 backdrop-blur-sm border border-purple-500/30 rounded-full px-6 py-3 mb-6">
-            <HelpCircle className="w-5 h-5 text-purple-400" />
-            <span className="text-purple-400 font-medium">Häufige Fragen</span>
+            <BadgeIcon className="w-5 h-5 text-purple-400" />
+            <span className="text-purple-400 font-medium">{badge.text}</span>
           </div>
           
           <h2 className="section-title font-serif font-bold mb-6 text-white">
-            Fragen & <span className="text-gold">Antworten</span>
+            {sectionTitle} <span className="text-gold">{sectionTitleHighlight}</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Die wichtigsten Fragen rund um Hochzeitsfotografie und unsere Services - 
-            schnell und übersichtlich beantwortet.
+            {description}
           </p>
         </div>
 
         <div className="reveal max-w-4xl mx-auto">
           {/* FAQ Categories */}
-          {groupedFAQs.map((group, groupIndex) => (
+          {groupedFAQs.map((group) => (
             <div key={group.category} className="mb-12">
               {categories.length > 1 && (
                 <h3 className="text-xl font-serif font-bold text-gold mb-6 text-center">
@@ -135,7 +129,7 @@ export default function FAQSection({ data }: FAQSectionProps) {
               )}
               
               <div className="space-y-4">
-                {group.items.map((faq, itemIndex) => {
+                {group.items.map((faq) => {
                   const globalIndex = faqs.indexOf(faq);
                   const isOpen = openItems.includes(globalIndex);
                   
@@ -183,41 +177,31 @@ export default function FAQSection({ data }: FAQSectionProps) {
           ))}
 
           {/* Quick Stats */}
-          <div className="reveal grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            <div className="reveal glass-card p-6 rounded-2xl text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gold/20 flex items-center justify-center">
-                <MessageCircle className="w-8 h-8 text-gold" />
-              </div>
-              <div className="text-2xl font-bold text-gold mb-2">24h</div>
-              <div className="text-gray-300">Antwortzeit</div>
+          {quickStats.length > 0 && (
+            <div className="reveal grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+              {quickStats.map((stat, index) => {
+                const StatIcon = iconMap[stat.icon] || MessageCircle;
+                return (
+                  <div key={index} className="reveal glass-card p-6 rounded-2xl text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gold/20 flex items-center justify-center">
+                      <StatIcon className="w-8 h-8 text-gold" />
+                    </div>
+                    <div className="text-2xl font-bold text-gold mb-2">{stat.value}</div>
+                    <div className="text-gray-300">{stat.label}</div>
+                  </div>
+                );
+              })}
             </div>
-            
-            <div className="reveal glass-card p-6 rounded-2xl text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gold/20 flex items-center justify-center">
-                <Phone className="w-8 h-8 text-gold" />
-              </div>
-              <div className="text-2xl font-bold text-gold mb-2">100%</div>
-              <div className="text-gray-300">Erreichbarkeit</div>
-            </div>
-            
-            <div className="reveal glass-card p-6 rounded-2xl text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gold/20 flex items-center justify-center">
-                <HelpCircle className="w-8 h-8 text-gold" />
-              </div>
-              <div className="text-2xl font-bold text-gold mb-2">∞</div>
-              <div className="text-gray-300">Beratung</div>
-            </div>
-          </div>
+          )}
 
           {/* Bottom CTA */}
           <div className="text-center">
             <div className="reveal glass-card rounded-2xl p-8 max-w-2xl mx-auto">
               <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                Ihre Frage ist nicht dabei?
+                {ctaBox.title}
               </h3>
               <p className="text-gray-300 mb-6">
-                Kein Problem! Kontaktieren Sie mich gerne direkt - ich beantworte 
-                alle Ihre Fragen rund um Hochzeitsfotografie und unsere Services.
+                {ctaBox.description}
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
@@ -228,7 +212,7 @@ export default function FAQSection({ data }: FAQSectionProps) {
                   className="group min-w-[200px]"
                 >
                   <MessageCircle className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                  Nachricht senden
+                  {ctaBox.buttonPrimary}
                 </Button>
                 
                 <Button
@@ -241,7 +225,7 @@ export default function FAQSection({ data }: FAQSectionProps) {
                   className="min-w-[200px]"
                 >
                   <Phone className="w-5 h-5 mr-2" />
-                  Anrufen
+                  {ctaBox.buttonSecondary}
                 </Button>
               </div>
             </div>
@@ -251,4 +235,3 @@ export default function FAQSection({ data }: FAQSectionProps) {
     </section>
   );
 }
-

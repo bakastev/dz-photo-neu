@@ -5,14 +5,51 @@ import { Mail, Phone, MapPin, Clock, Send, CheckCircle, Heart, Instagram, Facebo
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-// import { useTracking } from '@/components/shared/TrackingProvider';
+import { useTracking } from '@/components/shared/TrackingProvider';
 
 interface ContactSectionProps {
   data: {
-    phone: string;
-    email: string;
-    address: string;
-    socialMedia: {
+    sectionTitle?: string;
+    sectionTitleHighlight?: string;
+    description?: string;
+    formTitle?: string;
+    serviceOptions?: Array<{ value: string; label: string }>;
+    formLabels?: {
+      service: string;
+      name: string;
+      namePlaceholder: string;
+      email: string;
+      emailPlaceholder: string;
+      phone: string;
+      phonePlaceholder: string;
+      weddingDate: string;
+      location: string;
+      locationPlaceholder: string;
+      message: string;
+      messagePlaceholder: string;
+      submit: string;
+      submitting: string;
+    };
+    successMessage?: {
+      title: string;
+      description: string;
+      buttonText: string;
+    };
+    contactInfo?: {
+      title: string;
+      phone: string;
+      phoneHours: string;
+      email: string;
+      emailResponse: string;
+      address: string;
+      addressNote: string;
+    };
+    businessHours?: {
+      title: string;
+      hours: Array<{ day: string; time: string }>;
+    };
+    socialMedia?: {
+      title: string;
       instagram: string;
       facebook: string;
     };
@@ -20,6 +57,61 @@ interface ContactSectionProps {
 }
 
 export default function ContactSection({ data }: ContactSectionProps) {
+  // Defaults from database
+  const sectionTitle = data.sectionTitle || 'Lassen Sie uns';
+  const sectionTitleHighlight = data.sectionTitleHighlight || 'sprechen';
+  const description = data.description || 'Erzählen Sie mir von Ihrer Traumhochzeit!';
+  const formTitle = data.formTitle || 'Unverbindliche Anfrage';
+  const serviceOptions = data.serviceOptions || [
+    { value: 'hochzeitsfotografie', label: 'Hochzeitsfotografie' },
+    { value: 'fotobox', label: 'Fotobox Service' },
+    { value: 'verlobungsshooting', label: 'Verlobungsshooting' },
+    { value: 'beratung', label: 'Allgemeine Beratung' }
+  ];
+  const formLabels = data.formLabels || {
+    service: 'Welcher Service interessiert Sie?',
+    name: 'Ihr Name *',
+    namePlaceholder: 'Max & Maria Mustermann',
+    email: 'E-Mail Adresse *',
+    emailPlaceholder: 'ihre@email.at',
+    phone: 'Telefonnummer',
+    phonePlaceholder: '+43 XXX XXX XXXX',
+    weddingDate: 'Hochzeitsdatum',
+    location: 'Hochzeitslocation',
+    locationPlaceholder: 'z.B. Schloss Ort, Gmunden',
+    message: 'Ihre Nachricht *',
+    messagePlaceholder: 'Erzählen Sie mir von Ihrer Traumhochzeit...',
+    submit: 'Anfrage senden',
+    submitting: 'Wird gesendet...'
+  };
+  const successMessage = data.successMessage || {
+    title: 'Vielen Dank für Ihre Anfrage!',
+    description: 'Ich habe Ihre Nachricht erhalten und werde mich innerhalb von 24 Stunden bei Ihnen melden.',
+    buttonText: 'Neue Anfrage senden'
+  };
+  const contactInfo = data.contactInfo || {
+    title: 'Direkter Kontakt',
+    phone: '+43 XXX XXX XXX',
+    phoneHours: 'Mo-Fr 9:00-18:00',
+    email: 'info@dz-photo.at',
+    emailResponse: 'Antwort innerhalb 24h',
+    address: 'Oberösterreich, Wels & Umgebung',
+    addressNote: 'Österreichweit verfügbar'
+  };
+  const businessHours = data.businessHours || {
+    title: 'Erreichbarkeit',
+    hours: [
+      { day: 'Montag - Freitag', time: '9:00 - 18:00' },
+      { day: 'Samstag', time: '10:00 - 16:00' },
+      { day: 'Sonntag', time: 'Nach Vereinbarung' }
+    ]
+  };
+  const socialMedia = data.socialMedia || {
+    title: 'Folgen Sie mir',
+    instagram: 'https://instagram.com/dzphoto',
+    facebook: 'https://facebook.com/dzphoto'
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,7 +123,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  // const { trackEvent } = useTracking();
+  const { trackEvent } = useTracking();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -46,15 +138,13 @@ export default function ContactSection({ data }: ContactSectionProps) {
     setIsSubmitting(true);
 
     try {
-      // Track form submission
-      // trackEvent('ContactFormSubmit', { 
-      //   section: 'contact',
-      //   service_type: formData.service_type,
-      //   has_wedding_date: !!formData.wedding_date,
-      //   has_location: !!formData.location
-      // });
+      trackEvent('ContactFormSubmit', { 
+        section: 'contact',
+        service_type: formData.service_type,
+        has_wedding_date: !!formData.wedding_date,
+        has_location: !!formData.location
+      });
 
-      // Submit to API
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -68,19 +158,19 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
       if (response.ok) {
         setIsSubmitted(true);
-        // trackEvent('ContactFormSuccess', { 
-        //   section: 'contact',
-        //   service_type: formData.service_type
-        // });
+        trackEvent('ContactFormSuccess', { 
+          section: 'contact',
+          service_type: formData.service_type
+        });
       } else {
         throw new Error('Submission failed');
       }
     } catch (error) {
       console.error('Form submission error:', error);
-      // trackEvent('ContactFormError', { 
-      //   section: 'contact',
-      //   error: 'submission_failed'
-      // });
+      trackEvent('ContactFormError', { 
+        section: 'contact',
+        error: 'submission_failed'
+      });
       alert('Es gab einen Fehler beim Senden Ihrer Nachricht. Bitte versuchen Sie es erneut oder kontaktieren Sie mich direkt.');
     } finally {
       setIsSubmitting(false);
@@ -88,10 +178,10 @@ export default function ContactSection({ data }: ContactSectionProps) {
   };
 
   const handleDirectContact = (type: 'phone' | 'email' | 'social') => {
-    // trackEvent('DirectContact', { 
-    //   section: 'contact',
-    //   type: type
-    // });
+    trackEvent('DirectContact', { 
+      section: 'contact',
+      type: type
+    });
   };
 
   if (isSubmitted) {
@@ -104,11 +194,10 @@ export default function ContactSection({ data }: ContactSectionProps) {
                 <CheckCircle className="w-10 h-10 text-green-400" />
               </div>
               <h2 className="text-3xl font-serif font-bold text-white mb-4">
-                Vielen Dank für Ihre Anfrage!
+                {successMessage.title}
               </h2>
               <p className="text-gray-300 text-lg mb-6">
-                Ich habe Ihre Nachricht erhalten und werde mich innerhalb von 24 Stunden bei Ihnen melden. 
-                Freue mich darauf, mehr über Ihre Traumhochzeit zu erfahren!
+                {successMessage.description}
               </p>
               <Button
                 variant="gold"
@@ -116,7 +205,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                 className="group"
               >
                 <Heart className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                Neue Anfrage senden
+                {successMessage.buttonText}
               </Button>
             </div>
           </div>
@@ -135,11 +224,10 @@ export default function ContactSection({ data }: ContactSectionProps) {
         {/* Header */}
         <div className="text-center mb-16 reveal">
           <h2 className="section-title font-serif font-bold mb-6 text-white">
-            Lassen Sie uns <span className="text-gold">sprechen</span>
+            {sectionTitle} <span className="text-gold">{sectionTitleHighlight}</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Erzählen Sie mir von Ihrer Traumhochzeit! Ich freue mich darauf, 
-            Sie kennenzulernen und gemeinsam Ihren besonderen Tag zu planen.
+            {description}
           </p>
         </div>
 
@@ -149,14 +237,14 @@ export default function ContactSection({ data }: ContactSectionProps) {
             <div className="">
               <div className="reveal glass-card rounded-3xl p-8 md:p-12">
                 <h3 className="text-2xl font-serif font-bold text-white mb-8">
-                  Unverbindliche Anfrage
+                  {formTitle}
                 </h3>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Service Type */}
                   <div>
                     <label className="block text-white font-medium mb-2">
-                      Welcher Service interessiert Sie?
+                      {formLabels.service}
                     </label>
                     <select
                       name="service_type"
@@ -165,10 +253,11 @@ export default function ContactSection({ data }: ContactSectionProps) {
                       className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold focus:ring-2 focus:ring-gold/20 transition-colors"
                       required
                     >
-                      <option value="hochzeitsfotografie">Hochzeitsfotografie</option>
-                      <option value="fotobox">Fotobox Service</option>
-                      <option value="verlobungsshooting">Verlobungsshooting</option>
-                      <option value="beratung">Allgemeine Beratung</option>
+                      {serviceOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
@@ -176,28 +265,28 @@ export default function ContactSection({ data }: ContactSectionProps) {
                   <div className="reveal grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-white font-medium mb-2">
-                        Ihr Name *
+                        {formLabels.name}
                       </label>
                       <Input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        placeholder="Max & Maria Mustermann"
+                        placeholder={formLabels.namePlaceholder}
                         className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-gold"
                         required
                       />
                     </div>
                     <div>
                       <label className="block text-white font-medium mb-2">
-                        E-Mail Adresse *
+                        {formLabels.email}
                       </label>
                       <Input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        placeholder="ihre@email.at"
+                        placeholder={formLabels.emailPlaceholder}
                         className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-gold"
                         required
                       />
@@ -208,20 +297,20 @@ export default function ContactSection({ data }: ContactSectionProps) {
                   <div className="reveal grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-white font-medium mb-2">
-                        Telefonnummer
+                        {formLabels.phone}
                       </label>
                       <Input
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        placeholder="+43 XXX XXX XXXX"
+                        placeholder={formLabels.phonePlaceholder}
                         className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-gold"
                       />
                     </div>
                     <div>
                       <label className="block text-white font-medium mb-2">
-                        Hochzeitsdatum
+                        {formLabels.weddingDate}
                       </label>
                       <Input
                         type="date"
@@ -236,14 +325,14 @@ export default function ContactSection({ data }: ContactSectionProps) {
                   {/* Location */}
                   <div>
                     <label className="block text-white font-medium mb-2">
-                      Hochzeitslocation
+                      {formLabels.location}
                     </label>
                     <Input
                       type="text"
                       name="location"
                       value={formData.location}
                       onChange={handleInputChange}
-                      placeholder="z.B. Schloss Ort, Gmunden"
+                      placeholder={formLabels.locationPlaceholder}
                       className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-gold"
                     />
                   </div>
@@ -251,13 +340,13 @@ export default function ContactSection({ data }: ContactSectionProps) {
                   {/* Message */}
                   <div>
                     <label className="block text-white font-medium mb-2">
-                      Ihre Nachricht *
+                      {formLabels.message}
                     </label>
                     <Textarea
                       name="message"
                       value={formData.message}
                       onChange={handleInputChange}
-                      placeholder="Erzählen Sie mir von Ihrer Traumhochzeit..."
+                      placeholder={formLabels.messagePlaceholder}
                       rows={4}
                       className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-gold resize-none"
                       required
@@ -275,12 +364,12 @@ export default function ContactSection({ data }: ContactSectionProps) {
                     {isSubmitting ? (
                       <>
                         <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        Wird gesendet...
+                        {formLabels.submitting}
                       </>
                     ) : (
                       <>
                         <Send className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                        Anfrage senden
+                        {formLabels.submit}
                       </>
                     )}
                   </Button>
@@ -294,13 +383,13 @@ export default function ContactSection({ data }: ContactSectionProps) {
                 {/* Direct Contact */}
                 <div className="reveal glass-card rounded-3xl p-8">
                   <h3 className="text-2xl font-serif font-bold text-white mb-8">
-                    Direkter Kontakt
+                    {contactInfo.title}
                   </h3>
 
                   <div className="space-y-6">
                     {/* Phone */}
                     <a
-                      href={`tel:${data.phone}`}
+                      href={`tel:${contactInfo.phone.replace(/\s/g, '')}`}
                       onClick={() => handleDirectContact('phone')}
                       className="flex items-start space-x-4 p-4 rounded-xl hover:bg-white/5 transition-colors group"
                     >
@@ -310,15 +399,15 @@ export default function ContactSection({ data }: ContactSectionProps) {
                       <div>
                         <div className="text-white font-medium">Telefon</div>
                         <div className="text-gold group-hover:text-gold-light transition-colors">
-                          {data.phone}
+                          {contactInfo.phone}
                         </div>
-                        <div className="text-gray-400 text-sm">Mo-Fr 9:00-18:00</div>
+                        <div className="text-gray-400 text-sm">{contactInfo.phoneHours}</div>
                       </div>
                     </a>
 
                     {/* Email */}
                     <a
-                      href={`mailto:${data.email}`}
+                      href={`mailto:${contactInfo.email}`}
                       onClick={() => handleDirectContact('email')}
                       className="flex items-start space-x-4 p-4 rounded-xl hover:bg-white/5 transition-colors group"
                     >
@@ -328,9 +417,9 @@ export default function ContactSection({ data }: ContactSectionProps) {
                       <div>
                         <div className="text-white font-medium">E-Mail</div>
                         <div className="text-gold group-hover:text-gold-light transition-colors">
-                          {data.email}
+                          {contactInfo.email}
                         </div>
-                        <div className="text-gray-400 text-sm">Antwort innerhalb 24h</div>
+                        <div className="text-gray-400 text-sm">{contactInfo.emailResponse}</div>
                       </div>
                     </a>
 
@@ -341,8 +430,8 @@ export default function ContactSection({ data }: ContactSectionProps) {
                       </div>
                       <div>
                         <div className="text-white font-medium">Standort</div>
-                        <div className="text-gray-300">{data.address}</div>
-                        <div className="text-gray-400 text-sm">Österreichweit verfügbar</div>
+                        <div className="text-gray-300">{contactInfo.address}</div>
+                        <div className="text-gray-400 text-sm">{contactInfo.addressNote}</div>
                       </div>
                     </div>
                   </div>
@@ -352,32 +441,28 @@ export default function ContactSection({ data }: ContactSectionProps) {
                 <div className="reveal glass-card rounded-2xl p-6">
                   <h4 className="text-lg font-serif font-bold text-white mb-4 flex items-center">
                     <Clock className="w-5 h-5 mr-2 text-gold" />
-                    Erreichbarkeit
+                    {businessHours.title}
                   </h4>
                   <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-300">Montag - Freitag</span>
-                      <span className="text-white">9:00 - 18:00</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-300">Samstag</span>
-                      <span className="text-white">10:00 - 16:00</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-300">Sonntag</span>
-                      <span className="text-gray-400">Nach Vereinbarung</span>
-                    </div>
+                    {businessHours.hours.map((item, index) => (
+                      <div key={index} className="flex justify-between">
+                        <span className="text-gray-300">{item.day}</span>
+                        <span className={item.time.includes('Vereinbarung') ? 'text-gray-400' : 'text-white'}>
+                          {item.time}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
                 {/* Social Media */}
                 <div className="reveal glass-card rounded-2xl p-6">
                   <h4 className="text-lg font-serif font-bold text-white mb-4">
-                    Folgen Sie mir
+                    {socialMedia.title}
                   </h4>
                   <div className="flex space-x-4">
                     <a
-                      href={data.socialMedia.instagram}
+                      href={socialMedia.instagram}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => handleDirectContact('social')}
@@ -386,7 +471,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                       <Instagram className="w-6 h-6 text-white" />
                     </a>
                     <a
-                      href={data.socialMedia.facebook}
+                      href={socialMedia.facebook}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => handleDirectContact('social')}
