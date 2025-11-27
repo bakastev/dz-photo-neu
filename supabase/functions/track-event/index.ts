@@ -252,3 +252,4 @@ async function processQueueItem(supabaseClient: any, queueItem: any) {
       .eq('id', queueItem.id);
   }
 }
+

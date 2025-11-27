@@ -222,6 +222,32 @@ export default async function WeddingPage({ params }: PageProps) {
             </section>
           )}
 
+          {/* Content Section - Rich Text from CMS */}
+          {wedding.content && (
+            <section className="py-16 md:py-24">
+              <div className="container mx-auto px-4 md:px-6">
+                <div className="max-w-4xl mx-auto reveal">
+                  <div 
+                    className="prose prose-lg prose-invert max-w-none
+                      prose-headings:font-serif prose-headings:text-white
+                      prose-h1:text-4xl prose-h1:font-bold prose-h1:mb-6 prose-h1:mt-8
+                      prose-h2:text-3xl prose-h2:font-bold prose-h2:mb-4 prose-h2:mt-6
+                      prose-h3:text-2xl prose-h3:font-semibold prose-h3:mb-3 prose-h3:mt-4
+                      prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
+                      prose-a:text-gold prose-a:no-underline hover:prose-a:underline
+                      prose-strong:text-white prose-strong:font-semibold
+                      prose-em:text-gray-200
+                      prose-ul:text-gray-300 prose-ol:text-gray-300
+                      prose-li:mb-2
+                      prose-blockquote:border-l-gold prose-blockquote:text-gray-300 prose-blockquote:italic
+                      prose-img:rounded-xl prose-img:shadow-lg"
+                    dangerouslySetInnerHTML={{ __html: wedding.content }}
+                  />
+                </div>
+              </div>
+            </section>
+          )}
+
           {/* Gallery Section */}
           {images.length > 0 && (
             <section className="py-16 md:py-24 bg-black/30">

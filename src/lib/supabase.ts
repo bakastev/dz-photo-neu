@@ -62,6 +62,7 @@ export interface Location {
   region?: string;
   address?: string;
   description?: string;
+  content?: string;
   latitude?: number;
   longitude?: number;
   google_place_id?: string;

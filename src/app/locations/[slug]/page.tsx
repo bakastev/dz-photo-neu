@@ -11,6 +11,7 @@ import SchemaOrg from '@/components/shared/SchemaOrg';
 import ScrollRevealWrapper from '@/components/shared/ScrollRevealWrapper';
 import ImageGallery from '@/components/shared/ImageGallery';
 import ShareButton from '@/components/shared/ShareButton';
+import LocationMap from '@/components/shared/LocationMap';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -210,6 +211,26 @@ export default async function LocationPage({ params }: PageProps) {
                       </div>
                     </>
                   )}
+                  
+                  {/* Rich Text Content from CMS */}
+                  {location.content && (
+                    <div 
+                      className="mt-8 prose prose-lg prose-invert max-w-none
+                        prose-headings:font-serif prose-headings:text-white
+                        prose-h1:text-4xl prose-h1:font-bold prose-h1:mb-6 prose-h1:mt-8
+                        prose-h2:text-3xl prose-h2:font-bold prose-h2:mb-4 prose-h2:mt-6
+                        prose-h3:text-2xl prose-h3:font-semibold prose-h3:mb-3 prose-h3:mt-4
+                        prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-4
+                        prose-a:text-gold prose-a:no-underline hover:prose-a:underline
+                        prose-strong:text-white prose-strong:font-semibold
+                        prose-em:text-gray-200
+                        prose-ul:text-gray-300 prose-ol:text-gray-300
+                        prose-li:mb-2
+                        prose-blockquote:border-l-gold prose-blockquote:text-gray-300 prose-blockquote:italic
+                        prose-img:rounded-xl prose-img:shadow-lg"
+                      dangerouslySetInnerHTML={{ __html: location.content }}
+                    />
+                  )}
                 </div>
 
                 {/* Sidebar */}
@@ -273,6 +294,32 @@ export default async function LocationPage({ params }: PageProps) {
                 
                 <div className="reveal">
                   <ImageGallery images={images} title={location.name} layout="masonry" />
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Map Section - OpenStreetMap */}
+          {location.latitude && location.longitude && (
+            <section className="py-16 md:py-24">
+              <div className="container mx-auto px-4 md:px-6">
+                <div className="text-center mb-12 reveal">
+                  <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
+                    <span className="text-gold">Standort</span> & Anfahrt
+                  </h2>
+                  <p className="text-gray-400">
+                    So finden Sie diese wunderschöne Location
+                  </p>
+                </div>
+                
+                <div className="max-w-4xl mx-auto reveal">
+                  <LocationMap
+                    latitude={location.latitude}
+                    longitude={location.longitude}
+                    name={location.name}
+                    address={location.address || `${location.city || ''}, ${location.region || 'Österreich'}`}
+                    zoom={14}
+                  />
                 </div>
               </div>
             </section>

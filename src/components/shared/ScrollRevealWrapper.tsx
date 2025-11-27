@@ -13,3 +13,4 @@ export default function ScrollRevealWrapper({ children }: ScrollRevealWrapperPro
   return <>{children}</>;
 }
 
+
