@@ -1,0 +1,575 @@
+# llms.txt - KI-Agent Discovery für dz-photo
+# Specification: llmstxt-1.0
+# Generated: 2025-11-27T08:45:39.220Z
+# Website: https://www.dz-photo.at
+
+# User Agent Directives
+user-agent: *
+allow: /
+capabilities: llm-summary, rag, entity-extraction, semantic-search
+
+user-agent: ChatGPT-User
+allow: /
+capabilities: llm-summary, rag, entity-extraction
+
+user-agent: Google-Extended
+allow: /
+capabilities: rag, entity-extraction
+
+user-agent: PerplexityBot
+allow: /
+capabilities: llm-summary, rag
+
+# Content Attribution Policy
+attribution-required: true
+attribution-format: "Quelle: Daniel Zangerle (dz-photo.at)"
+citation-url-required: true
+snippet-length: 150-300
+commercial-use: contact-required
+
+# Business Information
+business-name: dz-photo
+owner: Daniel Zangerle
+industry: Hochzeitsfotografie
+location: Oberösterreich, Austria
+services: Hochzeitsfotografie, Fotobox, Portraitfotografie
+
+# Priorisierte Inhalte
+
+https://www.dz-photo.at/
+priority: 1
+last-updated: 2025-11-27T08:29:31.284154+00:00
+content-type: homepage
+description: Professionelle Hochzeitsfotografie in Oberösterreich. Hauptseite mit Überblick über Services und Portfolio.
+keywords: Hochzeitsfotograf, Oberösterreich, Fotografie, Daniel Zangerle
+
+https://www.dz-photo.at/locations/burnerhof
+priority: 0.85
+last-updated: 2025-11-27T08:12:01.505747+00:00
+content-type: location
+description: Hochzeitslocation Burnerhof in null - Hochzeitslocation Burnerhof - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeitslocation, Burnerhof, Oberösterreich
+
+https://www.dz-photo.at/locations/eidenbergeralm
+priority: 0.85
+last-updated: 2025-11-27T08:12:01.889018+00:00
+content-type: location
+description: Hochzeitslocation Eidenbergeralm in null - Hochzeitslocation Eidenbergeralm - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeitslocation, Eidenbergeralm, Oberösterreich
+
+https://www.dz-photo.at/locations/feichthub
+priority: 0.85
+last-updated: 2025-11-27T08:12:01.94496+00:00
+content-type: location
+description: Hochzeitslocation Feichthub in null - Hochzeitslocation Feichthub - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeitslocation, Feichthub, Oberösterreich
+
+https://www.dz-photo.at/locations/ganglbauergut
+priority: 0.85
+last-updated: 2025-11-27T08:12:01.448941+00:00
+content-type: location
+description: Hochzeitslocation Ganglbauergut in null - Hochzeitslocation Ganglbauergut - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeitslocation, Ganglbauergut, Oberösterreich
+
+https://www.dz-photo.at/locations/gut-kühstein
+priority: 0.85
+last-updated: 2025-11-27T08:29:16.795968+00:00
+content-type: location
+description: Hochzeitslocation Gut Kühstein in Kühstein - Heiraten im Gut Kühstein – Daniel Zangerle dz-photo
+
+Professionelle Hochzeitsfotografie von Daniel Zangerle dz-photo.
+keywords: Hochzeitslocation, Gut Kühstein, Kühstein, Oberösterreich
+
+https://www.dz-photo.at/locations/hoamat
+priority: 0.85
+last-updated: 2025-11-27T08:12:01.571689+00:00
+content-type: location
+description: Hochzeitslocation Hoamat in null - Hochzeitslocation Hoamat - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeitslocation, Hoamat, Oberösterreich
+
+https://www.dz-photo.at/locations/kletzmayrhof
+priority: 0.85
+last-updated: 2025-11-27T08:12:01.832226+00:00
+content-type: location
+description: Hochzeitslocation Kletzmayrhof in null - Hochzeitslocation Kletzmayrhof - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeitslocation, Kletzmayrhof, Oberösterreich
+
+https://www.dz-photo.at/locations/loryhof
+priority: 0.85
+last-updated: 2025-11-27T08:12:02.000962+00:00
+content-type: location
+description: Hochzeitslocation Loryhof in null - Hochzeitslocation Loryhof - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeitslocation, Loryhof, Oberösterreich
+
+https://www.dz-photo.at/locations/oberhauser
+priority: 0.85
+last-updated: 2025-11-27T08:12:01.772106+00:00
+content-type: location
+description: Hochzeitslocation Oberhauser in null - Hochzeitslocation Oberhauser - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeitslocation, Oberhauser, Oberösterreich
+
+https://www.dz-photo.at/locations/poestlingbergschloessl
+priority: 0.85
+last-updated: 2025-11-27T08:12:01.70388+00:00
+content-type: location
+description: Hochzeitslocation Pöstlingbergschlössl in null - Hochzeitslocation Pöstlingbergschlössl - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeitslocation, Pöstlingbergschlössl, Oberösterreich
+
+https://www.dz-photo.at/locations/stadlerhof
+priority: 0.85
+last-updated: 2025-11-27T08:12:01.643325+00:00
+content-type: location
+description: Hochzeitslocation Stadlerhof in null - Hochzeitslocation Stadlerhof - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeitslocation, Stadlerhof, Oberösterreich
+
+https://www.dz-photo.at/locations/tegernbach
+priority: 0.85
+last-updated: 2025-11-27T08:29:17.197686+00:00
+content-type: location
+description: Hochzeitslocation Tegernbach in Tegernbach - Heiraten in Tegernbach – Daniel Zangerle dz-photo
+
+Professionelle Hochzeitsfotografie von Daniel Zangerle dz-photo.
+keywords: Hochzeitslocation, Tegernbach, Tegernbach, Oberösterreich
+
+https://www.dz-photo.at/locations/vedahof
+priority: 0.85
+last-updated: 2025-11-27T08:12:01.363153+00:00
+content-type: location
+description: Hochzeitslocation Vedahof in null - Hochzeitslocation Vedahof - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeitslocation, Vedahof, Oberösterreich
+
+https://www.dz-photo.at/hochzeit/jennifer-walter-dz-photo-2
+priority: 0.8
+last-updated: 2025-11-27T08:12:01.305379+00:00
+content-type: wedding
+description: Hochzeitsfotografie Jennifer & Walter by dz-photo - Hochzeitsfotos von Jennifer & Walter by dz-photo - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Jennifer & Walter by dz-photo
+
+https://www.dz-photo.at/hochzeit/bianca-john
+priority: 0.8
+last-updated: 2025-11-27T08:12:01.253111+00:00
+content-type: wedding
+description: Hochzeitsfotografie Bianca & John - Hochzeitsfotos von Bianca & John - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Bianca & John
+
+https://www.dz-photo.at/hochzeit/anita-ahmet
+priority: 0.8
+last-updated: 2025-11-27T08:12:01.197449+00:00
+content-type: wedding
+description: Hochzeitsfotografie Anita & Ahmet - Hochzeitsfotos von Anita & Ahmet - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Anita & Ahmet
+
+https://www.dz-photo.at/hochzeit/am-burnerhof
+priority: 0.8
+last-updated: 2025-11-27T08:12:01.126469+00:00
+content-type: wedding
+description: Hochzeitsfotografie am Burnerhof von Beate und Sasa - Hochzeitsfotos von am Burnerhof von Beate und Sasa - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, am Burnerhof von Beate und Sasa
+
+https://www.dz-photo.at/hochzeit/birgit-michael-dz-photo
+priority: 0.8
+last-updated: 2025-11-27T08:12:01.056599+00:00
+content-type: wedding
+description: Hochzeitsfotografie Birgit & Michael - Hochzeitsfotos von Birgit & Michael - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Birgit & Michael
+
+https://www.dz-photo.at/hochzeit/jennifer-walter-dz-photo
+priority: 0.8
+last-updated: 2025-11-27T08:12:01.001073+00:00
+content-type: wedding
+description: Hochzeitsfotografie Jennifer & Walter - Hochzeitsfotos von Jennifer & Walter - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Jennifer & Walter
+
+https://www.dz-photo.at/hochzeit/marion-patrick-dz-photo
+priority: 0.8
+last-updated: 2025-11-27T08:12:00.94129+00:00
+content-type: wedding
+description: Hochzeitsfotografie Marion & Patrick - Hochzeitsfotos von Marion & Patrick - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Marion & Patrick
+
+https://www.dz-photo.at/hochzeit/karin-horst-by-dz-photo
+priority: 0.8
+last-updated: 2025-11-27T08:12:00.878996+00:00
+content-type: wedding
+description: Hochzeitsfotografie Karin & Horst - Hochzeitsfotos von Karin & Horst - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Karin & Horst
+
+https://www.dz-photo.at/hochzeit/julia-stefan
+priority: 0.8
+last-updated: 2025-11-27T08:12:00.812174+00:00
+content-type: wedding
+description: Hochzeitsfotografie Julia & Stefan - Hochzeitsfotos von Julia & Stefan - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Julia & Stefan
+
+https://www.dz-photo.at/hochzeit/lisa-patrick-dz-photo
+priority: 0.8
+last-updated: 2025-11-27T08:12:00.748837+00:00
+content-type: wedding
+description: Hochzeitsfotografie Lisa & Patrick - Hochzeitsfotos von Lisa & Patrick - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Lisa & Patrick
+
+https://www.dz-photo.at/hochzeit/franziska-ulrich
+priority: 0.8
+last-updated: 2025-11-27T08:12:00.688416+00:00
+content-type: wedding
+description: Hochzeitsfotografie Franziska & Ulrich - Hochzeitsfotos von Franziska & Ulrich - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Franziska & Ulrich
+
+https://www.dz-photo.at/hochzeit/irma-michael
+priority: 0.8
+last-updated: 2025-11-27T08:12:00.591178+00:00
+content-type: wedding
+description: Hochzeitsfotografie Irma & Michael - Hochzeitsfotos von Irma & Michael - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Irma & Michael
+
+https://www.dz-photo.at/hochzeit/lisa-patrick-by-dz-photo
+priority: 0.8
+last-updated: 2025-11-27T08:12:00.50947+00:00
+content-type: wedding
+description: Hochzeitsfotografie Lisa & Patrick by dz-photo - Hochzeitsfotos von Lisa & Patrick by dz-photo - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Lisa & Patrick by dz-photo
+
+https://www.dz-photo.at/hochzeit/tanja-daniel
+priority: 0.8
+last-updated: 2025-11-27T08:12:00.334141+00:00
+content-type: wedding
+description: Hochzeitsfotografie Tanja& Daniel - Hochzeitsfotos von Tanja& Daniel - Professionelle Hochzeitsfotografie von Daniel Zangerle
+keywords: Hochzeit, Tanja& Daniel
+
+https://www.dz-photo.at/hochzeit/test-wedding
+priority: 0.8
+last-updated: 2025-11-27T08:11:05.74051+00:00
+content-type: wedding
+description: Hochzeitsfotografie Test Couple - Hochzeitsbilder
+keywords: Hochzeit, Test Couple
+
+https://www.dz-photo.at/about
+priority: 0.8
+last-updated: 2025-11-27T08:12:05.34237+00:00
+content-type: page
+description: about – Daniel Zangerle dz-photo - about – Daniel Zangerle dz-photo - Daniel Zangerle dz-photo
+keywords: about, dz-photo, Daniel Zangerle
+
+https://www.dz-photo.at/fotobox/fotobox
+priority: 0.75
+last-updated: 2025-11-27T08:12:04.17563+00:00
+content-type: fotobox
+description: Fotobox-Galerie - Fotobox-Galerie - Professionelle Fotobox Services von Daniel Zangerle
+keywords: Fotobox, Photobooth, Hochzeit, package
+
+https://www.dz-photo.at/fotobox/fotoboxb2b
+priority: 0.65
+last-updated: 2025-11-27T08:12:04.121201+00:00
+content-type: fotobox
+description: Fotobox – Firmenkunden - Fotobox – Firmenkunden - Professionelle Fotobox Services von Daniel Zangerle
+keywords: Fotobox, Photobooth, Hochzeit, business
+
+https://www.dz-photo.at/fotobox/photobooth-galerie-test-seite
+priority: 0.65
+last-updated: 2025-11-27T08:12:04.237454+00:00
+content-type: fotobox
+description: Photobooth Galerie Test Seite - Photobooth Galerie Test Seite - Professionelle Fotobox Services von Daniel Zangerle
+keywords: Fotobox, Photobooth, Hochzeit, package
+
+https://www.dz-photo.at/fotobox/fotobox-fruehbucher
+priority: 0.65
+last-updated: 2025-11-27T08:12:04.307238+00:00
+content-type: fotobox
+description: Fotobox Frühbucher - Fotobox Frühbucher - Professionelle Fotobox Services von Daniel Zangerle
+keywords: Fotobox, Photobooth, Hochzeit, early-bird
+
+https://www.dz-photo.at/fotobox/photobooth-galerie-teilen-seite
+priority: 0.65
+last-updated: 2025-11-27T08:12:04.359814+00:00
+content-type: fotobox
+description: Photobooth Galerie Teilen Seite - Photobooth Galerie Teilen Seite - Professionelle Fotobox Services von Daniel Zangerle
+keywords: Fotobox, Photobooth, Hochzeit, package
+
+https://www.dz-photo.at/fotobox/fotobox-blitzangebot
+priority: 0.65
+last-updated: 2025-11-27T08:12:04.415257+00:00
+content-type: fotobox
+description: Fotobox Blitzangebot - Fotobox Blitzangebot - Professionelle Fotobox Services von Daniel Zangerle
+keywords: Fotobox, Photobooth, Hochzeit, special-offer
+
+https://www.dz-photo.at/fotobox/fotobox-dankeseite
+priority: 0.65
+last-updated: 2025-11-27T08:12:04.471402+00:00
+content-type: fotobox
+description: Fotobox-Dankeseite - Fotobox-Dankeseite - Professionelle Fotobox Services von Daniel Zangerle
+keywords: Fotobox, Photobooth, Hochzeit, package
+
+https://www.dz-photo.at/fotobox/photoboothdz
+priority: 0.65
+last-updated: 2025-11-27T08:12:04.065278+00:00
+content-type: fotobox
+description: Fotobox - Fotobox - Professionelle Fotobox Services von Daniel Zangerle
+keywords: Fotobox, Photobooth, Hochzeit, package
+
+https://www.dz-photo.at/fotobox/fotoboxlayouts
+priority: 0.65
+last-updated: 2025-11-27T08:12:04.528155+00:00
+content-type: fotobox
+description: Fotoboxlayouts - Fotoboxlayouts - Professionelle Fotobox Services von Daniel Zangerle
+keywords: Fotobox, Photobooth, Hochzeit, package
+
+https://www.dz-photo.at/tipp/5
+priority: 0.6
+last-updated: 2025-11-27T08:12:04.010969+00:00
+content-type: blog
+description: #Tipp 5 – Brainstorming – Daniel Zangerle dz-photo - Hochzeitstipp 5: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/13
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.957481+00:00
+content-type: blog
+description: #Tipp – 13 Wie erkenne ich einen professionellen Dienstleister – Daniel Zangerle dz-photo - Hochzeitstipp 13: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/4
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.896869+00:00
+content-type: blog
+description: #Tipp 4 – Save the Date Karten – Daniel Zangerle dz-photo - Hochzeitstipp 4: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/28
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.843333+00:00
+content-type: blog
+description: #Tipp 28 – Hochzeitsgeschenke – Daniel Zangerle dz-photo - Hochzeitstipp 28: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/19
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.787442+00:00
+content-type: blog
+description: #Tipp 19 – Hochzeitsgeschenke – Daniel Zangerle dz-photo - Hochzeitstipp 19: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/23-blumen
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.733899+00:00
+content-type: blog
+description: #Tipp 23 – Blumen – Daniel Zangerle dz-photo - Hochzeitstipp 23: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/15-einladungen
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.677644+00:00
+content-type: blog
+description: #Tipp – 15 Einladungen – Daniel Zangerle dz-photo - Hochzeitstipp 15: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/30-spiele
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.621211+00:00
+content-type: blog
+description: #Tipp 30 – Spiele – Daniel Zangerle dz-photo - Hochzeitstipp 30: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/12
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.293609+00:00
+content-type: blog
+description: #Tipp 12 – Dienstleister nicht nach Preis auswählen – Daniel Zangerle dz-photo - Hochzeitstipp 12: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/22-hochzeitsschuhe
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.237135+00:00
+content-type: blog
+description: #Tipp 22 – Hochzeitsschuhe – Daniel Zangerle dz-photo - Hochzeitstipp 22: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/27
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.185711+00:00
+content-type: blog
+description: #Tipp 27 – Entspannt euch – Daniel Zangerle dz-photo - Hochzeitstipp 27: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/14
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.134592+00:00
+content-type: blog
+description: #Tipp 14 – Dienstleister persönlich kennenlernen – Daniel Zangerle dz-photo - Hochzeitstipp 14: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/29-lasst-den-tag-einfach-passieren
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.08382+00:00
+content-type: blog
+description: #Tipp 29 – Lasst den Tag einfach passieren – Daniel Zangerle dz-photo - Hochzeitstipp 29: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/18
+priority: 0.6
+last-updated: 2025-11-27T08:12:03.033999+00:00
+content-type: blog
+description: #Tipp 18 – Snacks – Daniel Zangerle dz-photo - Hochzeitstipp 18: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/24-notfallkoerbchen
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.977136+00:00
+content-type: blog
+description: #Tipp 24 – Notfallkörbchen – Daniel Zangerle dz-photo - Hochzeitstipp 24: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/31
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.910608+00:00
+content-type: blog
+description: #Tipp 31 – Der Wurfstrauß – Daniel Zangerle dz-photo - Hochzeitstipp 31: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/6-ablaufplan
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.856511+00:00
+content-type: blog
+description: #Tipp 6 – Ablaufplan – Daniel Zangerle dz-photo - Hochzeitstipp 6: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/1
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.80426+00:00
+content-type: blog
+description: #Tipp 1 Der Hochzeitstermin – Daniel Zangerle dz-photo - Hochzeitstipp 1: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/7-checkliste
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.754525+00:00
+content-type: blog
+description: #Tipp 7 – Checkliste – Daniel Zangerle dz-photo - Hochzeitstipp 7: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/3-holt-euch-hilfe
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.696859+00:00
+content-type: blog
+description: #Tipp 3 holt euch Hilfe – Daniel Zangerle dz-photo - Hochzeitstipp 3: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/16
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.640581+00:00
+content-type: blog
+description: #Tipp 16 – Das Gastgeschenk – Daniel Zangerle dz-photo - Hochzeitstipp 16: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/2
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.586795+00:00
+content-type: blog
+description: #Tipp 2 – Fangt früh genug mit der Planung an – Daniel Zangerle dz-photo - Hochzeitstipp 2: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/8-hochzeitsmessen
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.529844+00:00
+content-type: blog
+description: #Tipp 8 – Hochzeitsmessen – Daniel Zangerle dz-photo - Hochzeitstipp 8: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/20
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.479384+00:00
+content-type: blog
+description: #Tipp 20 – Einwegkameras – Daniel Zangerle dz-photo - Hochzeitstipp 20: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/9
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.425187+00:00
+content-type: blog
+description: #Tipp 9 – das Brautpaarshooting – Daniel Zangerle dz-photo - Hochzeitstipp 9: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/17
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.36614+00:00
+content-type: blog
+description: #Tipp 17 – Der Hochzeitsfotograf – Daniel Zangerle dz-photo - Hochzeitstipp 17: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/11
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.30942+00:00
+content-type: blog
+description: #Tipp 11 – Ruhezone – Daniel Zangerle dz-photo - Hochzeitstipp 11: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/10
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.25725+00:00
+content-type: blog
+description: #Tipp 10 – Macht es nach euren Vorstellungen – Daniel Zangerle dz-photo - Hochzeitstipp 10: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/21
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.205822+00:00
+content-type: blog
+description: #Tipp 21 – Die Torte – Daniel Zangerle dz-photo - Hochzeitstipp 21: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/25-flipflops-schlapfen
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.150829+00:00
+content-type: blog
+description: #Tipp 25 – Flipflops / „Schlapfen“ – Daniel Zangerle dz-photo - Hochzeitstipp 25: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/tipp/26
+priority: 0.6
+last-updated: 2025-11-27T08:12:02.070754+00:00
+content-type: blog
+description: #Tipp 26 – gebt euer Handy ab – Daniel Zangerle dz-photo - Hochzeitstipp 26: Professionelle Beratung für eure Hochzeit
+keywords: Hochzeitstipp, Planung, Ratgeber
+
+https://www.dz-photo.at/kontakt-anfrage
+priority: 0.6
+last-updated: 2025-11-27T08:12:05.136209+00:00
+content-type: page
+description: Kontakt NEU – Daniel Zangerle dz-photo - Kontakt NEU – Daniel Zangerle dz-photo - Daniel Zangerle dz-photo
+keywords: contact, dz-photo, Daniel Zangerle
+
+https://www.dz-photo.at/engagement-shooting-info
+priority: 0.6
+last-updated: 2025-11-27T08:12:05.293189+00:00
+content-type: page
+description: Engagement Shooting – Daniel Zangerle dz-photo - Engagement Shooting – Daniel Zangerle dz-photo - Daniel Zangerle dz-photo
+keywords: services, dz-photo, Daniel Zangerle
+
+https://www.dz-photo.at/kontaktpaar
+priority: 0.6
+last-updated: 2025-11-27T08:12:05.452289+00:00
+content-type: page
+description: Kontakt Paarshooting – Daniel Zangerle dz-photo - Kontakt Paarshooting – Daniel Zangerle dz-photo - Daniel Zangerle dz-photo
+keywords: contact, dz-photo, Daniel Zangerle
+
+# Knowledge Graph Relations
+
+relations:
+- source: homepage
+  target: weddings
+  type: showcases
+  strength: 0.9
+
+- source: weddings
+  target: locations
+  type: photographed_at
+  strength: 0.8
+
+- source: blog
+  target: weddings
+  type: provides_tips_for
+  strength: 0.7
+
+# Contact & Feedback
+contact-email: info@dz-photo.at
+feedback-policy: welcome
+update-frequency: weekly
