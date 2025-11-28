@@ -18,18 +18,62 @@ import {
   MessageCircle,
   CreditCard,
   Calendar,
-  Sparkles
+  Sparkles,
+  Gauge,
+  Server,
+  FileText,
+  Users,
+  Camera,
+  MapPin,
+  BookOpen,
+  Star,
+  Mail,
+  Bell,
+  Eye,
+  TrendingUp,
+  Cpu,
+  Cloud,
+  Key,
+  Settings,
+  Layout,
+  Code,
+  Palette,
+  Rocket,
+  Target,
+  Brain,
+  Network,
+  Globe2,
+  ShieldCheck,
+  Clock,
+  DollarSign,
+  Heart,
+  Award,
+  Layers,
+  Boxes,
+  FileCheck,
+  RefreshCw,
+  Link as LinkIcon,
+  ImagePlus,
+  FolderOpen,
+  Type,
+  List,
+  Grid3x3,
+  Save,
+  Upload,
+  Download,
+  Trash2,
+  Copy,
+  Share2
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function OnboardingPresentation() {
-  const [activeSection, setActiveSection] = useState<'frontend' | 'backend' | 'admin' | null>(null);
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   return (
     <div className="min-h-screen bg-dark-background text-white">
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
-        {/* Background Elements */}
         <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 bg-gold/15 rounded-full blur-[120px] z-0" />
         <div className="absolute bottom-1/4 right-1/4 w-1/3 h-1/3 bg-gold-light/20 rounded-full blur-[100px] z-0" />
         
@@ -46,228 +90,678 @@ export default function OnboardingPresentation() {
             
             <p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed">
               Modern, schnell und perfekt optimiert für deine Kunden. 
-              Hier erfährst du, was dein neues System alles kann.
+              Hier erfährst du, was dein neues System alles kann und warum es dich voranbringt.
             </p>
+
+            <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-300">
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-gold" />
+                <span>83 Content-Items migriert</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-gold" />
+                <span>74 Schema.org Objekte</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-gold" />
+                <span>KI-optimiert</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-gold" />
+                <span>Production Ready</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Three Main Sections */}
-      <section className="py-20 bg-dark-surface">
+      {/* Frontend Section - Detailed */}
+      <section id="frontend" className="py-20 bg-dark-surface">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            
-            {/* Frontend Card */}
-            <div 
-              className={`glass-card rounded-2xl p-8 cursor-pointer transition-all duration-300 hover:scale-105 ${
-                activeSection === 'frontend' ? 'ring-2 ring-gold' : ''
-              }`}
-              onClick={() => setActiveSection(activeSection === 'frontend' ? null : 'frontend')}
-            >
-              <div className="flex items-center justify-center w-16 h-16 bg-gold/20 rounded-full mb-6">
-                <Globe className="w-8 h-8 text-gold" />
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gold/20 rounded-full mb-6">
+                <Globe className="w-10 h-10 text-gold" />
               </div>
-              
-              <h2 className="text-2xl font-serif font-bold mb-4 text-white">Frontend</h2>
-              <p className="text-gray-300 mb-6">
-                Das, was deine Kunden sehen – deine öffentliche Website
+              <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-white">
+                Frontend – <span className="text-gold">Was deine Kunden sehen</span>
+              </h2>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                Deine öffentliche Website, die jeden Besucher begeistert
               </p>
-              
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white mb-1">Blitzschnell & Modern</h3>
-                    <p className="text-sm text-gray-400">
-                      Was bringt dir das? Deine Kunden haben eine perfekte Erfahrung, 
-                      egal ob am Handy oder Desktop. Das bedeutet mehr Anfragen!
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <Search className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white mb-1">SEO-optimiert</h3>
-                    <p className="text-sm text-gray-400">
-                      Was bringt dir das? Google findet dich besser. 
-                      Mehr Sichtbarkeit = mehr potenzielle Kunden.
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <Smartphone className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white mb-1">Mobile-First</h3>
-                    <p className="text-sm text-gray-400">
-                      Was bringt dir das? Die meisten Besucher kommen vom Handy. 
-                      Deine Website sieht überall perfekt aus.
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
 
-            {/* Backend Card */}
-            <div 
-              className={`glass-card rounded-2xl p-8 cursor-pointer transition-all duration-300 hover:scale-105 ${
-                activeSection === 'backend' ? 'ring-2 ring-gold' : ''
-              }`}
-              onClick={() => setActiveSection(activeSection === 'backend' ? null : 'backend')}
-            >
-              <div className="flex items-center justify-center w-16 h-16 bg-gold/20 rounded-full mb-6">
-                <Database className="w-8 h-8 text-gold" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+              {/* Next.js 16 */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Rocket className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">Next.js 16 Framework</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> Das modernste Web-Framework von Vercel, 
+                  das von Netflix, TikTok und Hulu verwendet wird.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Blitzschnelle Ladezeiten:</strong> Seiten laden in unter 1 Sekunde</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Bessere Google-Rankings:</strong> Schnelle Seiten = höhere Position</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Weniger Absprünge:</strong> Kunden bleiben länger auf deiner Seite</span>
+                  </li>
+                </ul>
               </div>
-              
-              <h2 className="text-2xl font-serif font-bold mb-4 text-white">Backend</h2>
-              <p className="text-gray-300 mb-6">
-                Die unsichtbare Kraft – Datenbank & intelligente Systeme
-              </p>
-              
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <Zap className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white mb-1">KI-gestützt</h3>
-                    <p className="text-sm text-gray-400">
-                      Was bringt dir das? Deine Inhalte werden automatisch für 
-                      Suchmaschinen optimiert. Weniger Arbeit, bessere Ergebnisse!
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <BarChart3 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white mb-1">Analytics & Tracking</h3>
-                    <p className="text-sm text-gray-400">
-                      Was bringt dir das? Du siehst genau, was funktioniert. 
-                      Welche Seiten werden am meisten besucht? Woher kommen deine Kunden?
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <Shield className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white mb-1">Sicher & Zuverlässig</h3>
-                    <p className="text-sm text-gray-400">
-                      Was bringt dir das? Automatische Backups, keine Ausfälle. 
-                      Deine Website läuft immer, auch bei viel Traffic.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            {/* Admin Card */}
-            <div 
-              className={`glass-card rounded-2xl p-8 cursor-pointer transition-all duration-300 hover:scale-105 ${
-                activeSection === 'admin' ? 'ring-2 ring-gold' : ''
-              }`}
-              onClick={() => setActiveSection(activeSection === 'admin' ? null : 'admin')}
-            >
-              <div className="flex items-center justify-center w-16 h-16 bg-gold/20 rounded-full mb-6">
-                <Edit className="w-8 h-8 text-gold" />
+              {/* Static Site Generation */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <FileCheck className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">Static Site Generation (SSG)</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> Deine Seiten werden vorab generiert 
+                  und als statische HTML-Dateien gespeichert.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Extrem schnell:</strong> Keine Server-Berechnung bei jedem Besuch</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Kostenlos skalierbar:</strong> 10 oder 10.000 Besucher – kein Unterschied</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>99,9% Uptime:</strong> Deine Website läuft immer</span>
+                  </li>
+                </ul>
               </div>
-              
-              <h2 className="text-2xl font-serif font-bold mb-4 text-white">Admin-Bereich</h2>
-              <p className="text-gray-300 mb-6">
-                Dein Kontrollzentrum – alles selbst verwalten
-              </p>
-              
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <ImageIcon className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white mb-1">Einfaches Content-Management</h3>
-                    <p className="text-sm text-gray-400">
-                      Was bringt dir das? Neue Hochzeiten, Blog-Posts oder Locations 
-                      hinzufügen – so einfach wie ein Word-Dokument schreiben!
-                    </p>
-                  </div>
+
+              {/* Image Optimization */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <ImageIcon className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">Automatische Bildoptimierung</h3>
                 </div>
-                
-                <div className="flex items-start space-x-3">
-                  <Lock className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white mb-1">Sicherer Zugang</h3>
-                    <p className="text-sm text-gray-400">
-                      Was bringt dir das? Nur du (und von dir autorisierte Personen) 
-                      können Änderungen vornehmen. Deine Website ist geschützt.
-                    </p>
-                  </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> Alle Bilder werden automatisch 
+                  in moderne Formate (WebP, AVIF) konvertiert und in verschiedenen Größen bereitgestellt.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>70% kleinere Dateien:</strong> Deine Hochzeitsbilder laden viel schneller</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Weniger Datenverbrauch:</strong> Wichtig für mobile Nutzer</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Bessere Core Web Vitals:</strong> Google belohnt schnelle Seiten</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* SEO Optimization */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Search className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">SEO-Optimierung</h3>
                 </div>
-                
-                <div className="flex items-start space-x-3">
-                  <Zap className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white mb-1">Sofort online</h3>
-                    <p className="text-sm text-gray-400">
-                      Was bringt dir das? Änderungen sind sofort sichtbar. 
-                      Keine Wartezeiten, keine technischen Hürden.
-                    </p>
-                  </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> Deine Website ist so aufgebaut, 
+                  dass Google sie perfekt versteht und indexiert.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Mehr organische Besucher:</strong> Kunden finden dich ohne Werbung</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Rich Snippets:</strong> Deine Ergebnisse erscheinen prominenter</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Strukturierte Daten:</strong> 74 Schema.org Objekte für maximale Sichtbarkeit</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Mobile-First Design */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Smartphone className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">Mobile-First Design</h3>
                 </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> Deine Website wurde zuerst für 
+                  Smartphones entwickelt und dann für größere Bildschirme erweitert.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>60-70% deiner Besucher:</strong> Kommen vom Handy – perfekt optimiert</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Touch-optimiert:</strong> Buttons und Navigation perfekt für Finger</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Google Mobile-First:</strong> Bessere Rankings durch mobile Optimierung</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Lightbox Gallery */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Camera className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">Professionelle Bildergalerie</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> Eine moderne Lightbox-Galerie 
+                  mit Zoom, Thumbnails und Touch-Gesten.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Professioneller Eindruck:</strong> Wie bei teuren Hochzeitswebsites</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Mehr Engagement:</strong> Besucher bleiben länger und sehen mehr Bilder</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Social Sharing:</strong> Kunden teilen deine Arbeit leichter</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Detailed Benefits Section */}
+      {/* Backend Section - Detailed */}
+      <section id="backend" className="py-20 bg-dark-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gold/20 rounded-full mb-6">
+                <Database className="w-10 h-10 text-gold" />
+              </div>
+              <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-white">
+                Backend – <span className="text-gold">Die unsichtbare Kraft</span>
+              </h2>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                Datenbank, KI-Integration und intelligente Systeme im Hintergrund
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+              {/* Supabase PostgreSQL */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Server className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">Supabase PostgreSQL</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> Eine professionelle, 
+                  skalierbare Datenbank (wie bei großen Unternehmen verwendet).
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>83 Content-Items:</strong> Alle deine Hochzeiten, Locations, Blog-Posts gespeichert</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Automatische Backups:</strong> Deine Daten sind immer sicher</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Skalierbar:</strong> Wächst mit deinem Business mit</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* KI-Integration */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Brain className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">KI-gestützte Optimierung</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> OpenAI Embeddings analysieren 
+                  deine Inhalte und optimieren sie automatisch für Suchmaschinen.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>83 Embeddings:</strong> Jeder Content ist KI-optimiert</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Semantic Search:</strong> Kunden finden dich auch mit ähnlichen Begriffen</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Automatische SEO:</strong> Meta-Descriptions, Keywords – alles automatisch</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Schema.org */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Layers className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">74 Schema.org Objekte</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> Strukturierte Daten, 
+                  die Google helfen, deine Inhalte besser zu verstehen.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Rich Snippets:</strong> Deine Ergebnisse haben Sterne, Bilder, Preise</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Mehr Klicks:</strong> Prominente Ergebnisse = mehr Besucher</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>KI-Agent Ready:</strong> ChatGPT & Co. finden dich leichter</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Analytics & Tracking */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <BarChart3 className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">Server-Side Analytics</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> Tracking direkt vom Server, 
+                  nicht vom Browser – GDPR-konform und zuverlässiger.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Meta Conversion API:</strong> Deine Facebook-Werbung wird besser gemessen</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Google Analytics 4:</strong> Detaillierte Einblicke in deine Besucher</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>GDPR-konform:</strong> Keine Probleme mit Datenschutz</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* GEO Intelligence */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <MapPin className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">GEO Intelligence</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> 13 Locations mit präzisen 
+                  Koordinaten, Google Maps Integration und Umkreissuche.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Lokale Suche:</strong> "Hochzeitsfotograf Linz" – du wirst gefunden</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Google Maps:</strong> Direkte Navigation zu Locations</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Umkreissuche:</strong> Kunden finden Locations in ihrer Nähe</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* llms.txt */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Network className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">KI-Agent Discovery</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist das?</strong> llms.txt Datei, die KI-Agents 
+                  (wie ChatGPT) hilft, deine Website zu verstehen.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Zukunftssicher:</strong> Wenn jemand ChatGPT fragt, wird deine Website erwähnt</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>73 priorisierte URLs:</strong> Wichtigste Seiten zuerst</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Content Attribution:</strong> Deine Arbeit wird immer korrekt zitiert</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Admin Section - Detailed */}
+      <section id="admin" className="py-20 bg-dark-surface">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gold/20 rounded-full mb-6">
+                <Edit className="w-10 h-10 text-gold" />
+              </div>
+              <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-white">
+                Admin-Bereich – <span className="text-gold">Dein Kontrollzentrum</span>
+              </h2>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                Alles selbst verwalten – ohne technisches Wissen
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+              {/* Content Management */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <FileText className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">Content Management</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was kannst du machen?</strong> Hochzeiten, Locations, 
+                  Blog-Posts, Fotobox-Services und mehr verwalten.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Selbstständigkeit:</strong> Keine Wartezeiten auf Webdesigner</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Rich Text Editor:</strong> Texte formatieren wie in Word</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Sofort online:</strong> Änderungen sind sofort sichtbar</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Media Library */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <FolderOpen className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">Media Library</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was kannst du machen?</strong> Alle Bilder verwalten, 
+                  hochladen, organisieren und in Galerien verwenden.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Drag & Drop:</strong> Bilder einfach per Drag & Drop hochladen</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Automatische Optimierung:</strong> Bilder werden automatisch komprimiert</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Organisiert:</strong> Nach Hochzeiten, Locations, etc. sortiert</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Homepage Editor */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Layout className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">Homepage Editor</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was kannst du machen?</strong> Jede Section deiner 
+                  Homepage einzeln bearbeiten – Hero, About, Services, Portfolio, etc.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Vollständige Kontrolle:</strong> Jeden Text, jedes Bild ändern</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Live Preview:</strong> Siehst sofort, wie es aussieht</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Keine Fehler:</strong> Validierung verhindert Probleme</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* User Management */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Users className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">User Management</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was kannst du machen?</strong> Weitere Admin-User 
+                  einladen (z.B. Assistenten) mit verschiedenen Rollen.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Teamarbeit:</strong> Mehrere Personen können Inhalte pflegen</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Rollen-System:</strong> Admin (alles) oder Editor (nur Content)</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Sicher:</strong> Nur autorisierte Personen haben Zugang</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* SEO Tools */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Target className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">SEO-Tools</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was kannst du machen?</strong> Meta-Titel, 
+                  Meta-Beschreibungen, Keywords für jede Seite setzen.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Bessere Rankings:</strong> Optimierte Meta-Daten = mehr Klicks</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Vorschau:</strong> Siehst, wie es in Google aussieht</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Automatische Vorschläge:</strong> KI schlägt optimale Texte vor</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Security */}
+              <div className="glass-card rounded-xl p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <ShieldCheck className="w-6 h-6 text-gold" />
+                  <h3 className="text-xl font-semibold text-white">Sicherheit</h3>
+                </div>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was ist geschützt?</strong> Session-basierte 
+                  Authentifizierung, verschlüsselte Verbindungen, Rollen-basierte Zugriffe.
+                </p>
+                <p className="text-gray-300 mb-4">
+                  <strong className="text-gold">Was bringt dir das?</strong>
+                </p>
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Keine Hacker:</strong> Moderne Sicherheitsstandards</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Automatische Logouts:</strong> Bei Inaktivität wird abgemeldet</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
+                    <span><strong>Backups:</strong> Täglich automatische Sicherungen</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Performance & Statistics */}
       <section className="py-20 bg-dark-background">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-center mb-12 text-white">
-              Warum dieses System?
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="glass-card rounded-xl p-6">
-                <h3 className="text-xl font-semibold text-white mb-3 flex items-center">
-                  <CheckCircle2 className="w-6 h-6 text-gold mr-2" />
-                  Zeitersparnis
-                </h3>
-                <p className="text-gray-300">
-                  Keine langen Wartezeiten mehr auf deinen Webdesigner. 
-                  Ändere Texte, füge Bilder hinzu oder veröffentliche neue Inhalte – 
-                  alles selbst, wann immer du willst.
-                </p>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4 text-white">
+                Zahlen, die <span className="text-gold">überzeugen</span>
+              </h2>
+              <p className="text-xl text-gray-300">
+                Konkrete Fakten zu deinem neuen System
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+              <div className="glass-card rounded-xl p-6 text-center">
+                <div className="text-4xl font-bold text-gold mb-2">83</div>
+                <div className="text-gray-300">Content-Items</div>
+                <div className="text-sm text-gray-400 mt-2">Hochzeiten, Locations, Blog-Posts</div>
               </div>
-              
-              <div className="glass-card rounded-xl p-6">
-                <h3 className="text-xl font-semibold text-white mb-3 flex items-center">
-                  <CheckCircle2 className="w-6 h-6 text-gold mr-2" />
-                  Professioneller Auftritt
-                </h3>
-                <p className="text-gray-300">
-                  Deine Website sieht nicht nur modern aus, sie ist auch technisch 
-                  auf dem neuesten Stand. Das merken Suchmaschinen und deine Kunden.
-                </p>
+              <div className="glass-card rounded-xl p-6 text-center">
+                <div className="text-4xl font-bold text-gold mb-2">74</div>
+                <div className="text-gray-300">Schema.org Objekte</div>
+                <div className="text-sm text-gray-400 mt-2">Für maximale Sichtbarkeit</div>
               </div>
-              
-              <div className="glass-card rounded-xl p-6">
-                <h3 className="text-xl font-semibold text-white mb-3 flex items-center">
-                  <CheckCircle2 className="w-6 h-6 text-gold mr-2" />
-                  Skalierbar
-                </h3>
-                <p className="text-gray-300">
-                  Egal ob 10 oder 10.000 Besucher pro Tag – deine Website bleibt 
-                  schnell und zuverlässig. Wachse ohne technische Sorgen.
-                </p>
+              <div className="glass-card rounded-xl p-6 text-center">
+                <div className="text-4xl font-bold text-gold mb-2">&lt;1s</div>
+                <div className="text-gray-300">Ladezeit</div>
+                <div className="text-sm text-gray-400 mt-2">Blitzschnell geladen</div>
               </div>
-              
-              <div className="glass-card rounded-xl p-6">
-                <h3 className="text-xl font-semibold text-white mb-3 flex items-center">
-                  <CheckCircle2 className="w-6 h-6 text-gold mr-2" />
-                  Zukunftssicher
-                </h3>
-                <p className="text-gray-300">
-                  Modernste Technologie bedeutet: Deine Website bleibt auch in 
-                  den nächsten Jahren aktuell. Keine teuren Neuentwicklungen nötig.
-                </p>
+              <div className="glass-card rounded-xl p-6 text-center">
+                <div className="text-4xl font-bold text-gold mb-2">99.9%</div>
+                <div className="text-gray-300">Uptime</div>
+                <div className="text-sm text-gray-400 mt-2">Deine Website läuft immer</div>
+              </div>
+            </div>
+
+            <div className="glass-card rounded-2xl p-8">
+              <h3 className="text-2xl font-serif font-bold mb-6 text-white text-center">
+                Was bedeutet das für dich?
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <TrendingUp className="w-12 h-12 text-gold mx-auto mb-4" />
+                  <h4 className="font-semibold text-white mb-2">Mehr Besucher</h4>
+                  <p className="text-gray-300 text-sm">
+                    Schnelle Seiten + SEO = mehr organische Besucher ohne Werbung
+                  </p>
+                </div>
+                <div className="text-center">
+                  <DollarSign className="w-12 h-12 text-gold mx-auto mb-4" />
+                  <h4 className="font-semibold text-white mb-2">Weniger Kosten</h4>
+                  <p className="text-gray-300 text-sm">
+                    Keine monatlichen Wartungskosten für einfache Änderungen
+                  </p>
+                </div>
+                <div className="text-center">
+                  <Clock className="w-12 h-12 text-gold mx-auto mb-4" />
+                  <h4 className="font-semibold text-white mb-2">Mehr Zeit</h4>
+                  <p className="text-gray-300 text-sm">
+                    Selbstständig arbeiten statt auf Webdesigner warten
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -339,7 +833,7 @@ export default function OnboardingPresentation() {
                   Fragen vorab? Terminvereinbarung für den Setup-Call?
                 </p>
                 <a
-                  href="https://wa.me/436641234567?text=Hallo!%20Ich%20habe%20Fragen%20zu%20meiner%20neuen%20Website%20oder%20möchte%20einen%20Setup-Call%20vereinbaren."
+                  href="https://wa.me/4915225317285?text=Hallo!%20Ich%20habe%20Fragen%20zu%20meiner%20neuen%20Website%20oder%20möchte%20einen%20Setup-Call%20vereinbaren."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center space-x-2 text-gold hover:text-gold-light transition-colors"
@@ -355,4 +849,3 @@ export default function OnboardingPresentation() {
     </div>
   );
 }
-
