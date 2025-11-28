@@ -89,21 +89,17 @@ export default function Navbar() {
           {/* Logo */}
           <Link 
             href="/" 
-            className="flex items-center space-x-3 text-white hover:text-gold transition-colors group"
+            className="flex items-center text-white hover:text-gold transition-colors group"
           >
-            <div className="relative w-12 h-12 group-hover:scale-110 transition-transform">
+            <div className="relative w-20 h-20 md:w-24 md:h-24 group-hover:scale-110 transition-transform">
               <Image
                 src="/dz-photo-logo-white.png"
                 alt="DZ-Photo Logo"
                 fill
                 className="object-contain"
-                sizes="(max-width: 768px) 120px, 150px"
+                sizes="(max-width: 768px) 80px, 96px"
                 priority
               />
-            </div>
-            <div className="hidden sm:block">
-              <div className="font-serif font-bold text-xl group-hover:text-gold transition-colors">DZ-Photo</div>
-              <div className="text-xs text-gray-400">Daniel Zangerle</div>
             </div>
           </Link>
 

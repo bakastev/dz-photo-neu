@@ -1,5 +1,7 @@
 import Link from 'next/link';
-import { Camera, Heart, Mail, Phone, MapPin, Instagram, Facebook } from 'lucide-react';
+import Image from 'next/image';
+import { Heart, Mail, Phone, MapPin, Instagram, Facebook } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 const quickLinks = [
   { name: 'Über mich', href: '#about' },
@@ -19,10 +21,40 @@ const legal = [
   { name: 'Impressum', href: '/impressum' },
   { name: 'Datenschutz', href: '/datenschutz' },
   { name: 'AGB', href: '/agb' },
+  { name: 'Cookie-Einstellungen', href: '/cookie-einstellungen' },
 ];
 
-export default function Footer() {
+async function getSiteSettings() {
+  try {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('contact_email, contact_phone')
+      .single();
+
+    if (error) {
+      console.error('Error fetching site settings:', error);
+      return {
+        contact_email: 'info@dz-photo.at',
+        contact_phone: '+43 664 123 4567',
+      };
+    }
+
+    return {
+      contact_email: data?.contact_email || 'info@dz-photo.at',
+      contact_phone: data?.contact_phone || '+43 664 123 4567',
+    };
+  } catch (error) {
+    console.error('Error fetching site settings:', error);
+    return {
+      contact_email: 'info@dz-photo.at',
+      contact_phone: '+43 664 123 4567',
+    };
+  }
+}
+
+export default async function Footer() {
   const currentYear = new Date().getFullYear();
+  const settings = await getSiteSettings();
 
   return (
     <footer className="bg-dark-background border-t border-white/10">
@@ -30,15 +62,20 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="lg:col-span-1">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
-                <Camera className="w-7 h-7 text-gold" />
+            <Link 
+              href="/" 
+              className="inline-block mb-6 group"
+            >
+              <div className="relative w-24 h-24 md:w-28 md:h-28 group-hover:scale-105 transition-transform">
+                <Image
+                  src="/dz-photo-logo-white.png"
+                  alt="DZ-Photo Logo"
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 768px) 96px, 112px"
+                />
               </div>
-              <div>
-                <div className="font-serif font-bold text-xl text-white">DZ-Photo</div>
-                <div className="text-sm text-gray-400">Daniel Zangerle</div>
-              </div>
-            </div>
+            </Link>
             <p className="text-gray-300 mb-6 leading-relaxed">
               Professionelle Hochzeitsfotografie in Oberösterreich. 
               Emotionale Momente, die ein Leben lang bleiben.
@@ -107,10 +144,10 @@ export default function Footer() {
                 <Phone className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
                 <div>
                   <a 
-                    href="tel:+43XXXXXXXXX" 
+                    href={`tel:${settings.contact_phone.replace(/\s/g, '')}`}
                     className="text-gray-300 hover:text-gold transition-colors duration-300"
                   >
-                    +43 XXX XXX XXX
+                    {settings.contact_phone}
                   </a>
                 </div>
               </div>
@@ -119,10 +156,10 @@ export default function Footer() {
                 <Mail className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
                 <div>
                   <a 
-                    href="mailto:info@dz-photo.at" 
+                    href={`mailto:${settings.contact_email}`}
                     className="text-gray-300 hover:text-gold transition-colors duration-300"
                   >
-                    info@dz-photo.at
+                    {settings.contact_email}
                   </a>
                 </div>
               </div>

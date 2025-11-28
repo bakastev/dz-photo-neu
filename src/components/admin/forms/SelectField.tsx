@@ -58,7 +58,7 @@ export default function SelectField({
             <SelectItem
               key={option.value}
               value={option.value}
-              className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer"
+              className="text-white data-[highlighted]:bg-[#D4AF37]/20 data-[highlighted]:text-[#D4AF37] cursor-pointer"
             >
               {option.label}
             </SelectItem>

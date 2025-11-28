@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { getImageUrl, defaultBlurDataURL, formatPrice } from '@/lib/utils';
 import type { FotoboxService } from '@/lib/supabase';
 
+const FOTOBOX_VIDEO_URL = '/videos/fotobox-video.mp4';
+
 interface FotoboxSectionProps {
   data: FotoboxService[];
 }
@@ -52,42 +54,8 @@ export default function FotoboxSection({ data }: FotoboxSectionProps) {
     }
   };
 
-  // Fallback data if no services are provided
-  const fallbackServices = [
-    {
-      id: 'deluxe',
-      name: 'Deluxe Fotobox',
-      service_type: 'premium',
-      description: 'Bis zu 400 Sofortausdrucke in Laborqualität mit großem Hintergrundsystem',
-      features: ['Bis zu 400 Sofortausdrucke', 'Großes Hintergrundsystem 2,5×2,5m', 'Sofortupload in Online-Galerie', 'Accessoires Box inklusive'],
-      cover_image: '/fotobox-deluxe.jpg',
-      price: 349,
-      currency: 'EUR',
-      popular: true
-    },
-    {
-      id: 'classic',
-      name: 'Classic Fotobox',
-      service_type: 'standard',
-      description: 'Perfekt für kleinere Feiern mit 200 Sofortausdrucken',
-      features: ['Bis zu 200 Sofortausdrucke', 'Kompaktes Setup', 'Online-Galerie', 'Basis Accessoires'],
-      cover_image: '/fotobox-classic.jpg',
-      price: 249,
-      currency: 'EUR',
-      popular: false
-    },
-    {
-      id: 'premium',
-      name: 'Premium Fotobox',
-      service_type: 'premium',
-      description: 'Das Komplettpaket für unvergessliche Momente',
-      features: ['Unbegrenzte Ausdrucke', 'XXL Hintergrundsystem', 'Live-Streaming', 'Premium Accessoires'],
-      cover_image: '/fotobox-premium.jpg',
-      price: 449,
-      currency: 'EUR',
-      popular: false
-    }
-  ];
+  // Fallback data if no services are provided (sollte nicht mehr benötigt werden, da echte Daten in DB)
+  const fallbackServices: FotoboxService[] = [];
 
   const services = data.length > 0 ? data : fallbackServices;
   const featuredService = services[activeService] || services[0];
@@ -107,10 +75,10 @@ export default function FotoboxSection({ data }: FotoboxSectionProps) {
           </div>
           
           <h2 className="section-title font-serif font-bold mb-6 text-white">
-            Fotobox für Ihre <span className="text-gold">Hochzeit</span>
+            Fotobox mieten – wenige Klicks zum <span className="text-gold">must-have</span> für jede Party!
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Unvergessliche Momente mit unserer Deluxe-Fotobox. Ihre Gäste werden begeistert sein!
+            Mietet hier eure Fotobox für die nächste Feier. Schnell, einfach und bequem. Ihr wählt ein Modell aus und wir kümmern uns um den Rest. Inklusive Lieferung, Aufbau, Einstellung, Abbau und Abholung.
           </p>
         </div>
 
@@ -175,30 +143,24 @@ export default function FotoboxSection({ data }: FotoboxSectionProps) {
               </div>
             </div>
 
-            {/* Right: Fotobox Gallery/Video */}
+            {/* Right: Fotobox Demo Video */}
             <div className="">
               <div className="relative">
-                {/* Main Image/Video */}
+                {/* Video Player */}
                 <div className="relative h-96 rounded-3xl overflow-hidden glass-card">
-                  <Image
-                    src={getImageUrl(featuredService.cover_image)}
-                    alt="Fotobox Setup"
-                    fill
-                    className="object-cover"
-                    placeholder="blur"
-                    blurDataURL={defaultBlurDataURL}
-                  />
-                  
-                  {/* Video Play Button Overlay */}
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center group cursor-pointer">
-                    <div className="w-20 h-20 bg-gold/90 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <Play className="w-8 h-8 text-white ml-1" />
-                    </div>
-                  </div>
+                  <video
+                    className="w-full h-full object-cover"
+                    controls
+                    preload="metadata"
+                    poster="/fotobox-video-poster.jpg"
+                  >
+                    <source src={FOTOBOX_VIDEO_URL} type="video/mp4" />
+                    Ihr Browser unterstützt das Video-Element nicht.
+                  </video>
                   
                   {/* Badge */}
                   <div className="absolute top-4 left-4 bg-gold/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium">
-                    Live Demo
+                    Demo Video
                   </div>
                 </div>
 

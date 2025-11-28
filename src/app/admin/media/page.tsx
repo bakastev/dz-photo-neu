@@ -203,7 +203,7 @@ export default function MediaLibraryPage() {
                 className={cn(
                   selectedFolder === folder.value
                     ? 'bg-[#D4AF37] text-white'
-                    : 'text-gray-400 hover:text-white'
+                    : 'text-white hover:bg-white/10'
                 )}
               >
                 <Folder className="w-4 h-4 mr-1" />
@@ -404,7 +404,7 @@ export default function MediaLibraryPage() {
                     <td className="px-4 py-3 text-gray-400 capitalize">{file.folder}</td>
                     <td className="px-4 py-3 text-right">
                       <a href={file.url} download target="_blank" rel="noopener noreferrer">
-                        <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+                        <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                           <Download className="w-4 h-4" />
                         </Button>
                       </a>

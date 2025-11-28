@@ -118,7 +118,7 @@ export default function ReviewEditor({ review, isNew = false }: ReviewEditorProp
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/admin/reviews">
-            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
               <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>

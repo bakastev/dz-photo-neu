@@ -12,6 +12,7 @@ import SelectField from '../forms/SelectField';
 import ToggleField from '../forms/ToggleField';
 import LexicalEditor from '../LexicalEditor';
 import Link from 'next/link';
+import HomepageEditorContent from './HomepageEditorContent';
 
 interface Page {
   id: string;
@@ -32,10 +33,9 @@ interface PageEditorProps {
 }
 
 const pageTypeOptions = [
-  { value: 'standard', label: 'Standardseite' },
-  { value: 'landing', label: 'Landingpage' },
+  { value: 'homepage', label: 'Startseite' },
+  { value: 'content', label: 'Content-Seite' },
   { value: 'legal', label: 'Rechtliches (Impressum, Datenschutz)' },
-  { value: 'contact', label: 'Kontaktseite' },
 ];
 
 export default function PageEditor({ page, isNew = false }: PageEditorProps) {
@@ -48,10 +48,14 @@ export default function PageEditor({ page, isNew = false }: PageEditorProps) {
   const [title, setTitle] = useState(page?.title || '');
   const [slug, setSlug] = useState(page?.slug || '');
   const [content, setContent] = useState(page?.content || '');
-  const [pageType, setPageType] = useState(page?.page_type || 'standard');
+  const [pageType, setPageType] = useState(page?.page_type || 'content');
   const [published, setPublished] = useState(page?.published || false);
   const [metaTitle, setMetaTitle] = useState(page?.meta_title || '');
   const [metaDescription, setMetaDescription] = useState(page?.meta_description || '');
+
+  // Für Homepage: page_type nicht ändern lassen
+  const isHomepage = pageType === 'homepage';
+  const canChangePageType = !page || !page.id || page.page_type !== 'homepage';
 
   const handleSave = async () => {
     setSaving(true);
@@ -122,7 +126,7 @@ export default function PageEditor({ page, isNew = false }: PageEditorProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/admin/pages">
-            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
               <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
@@ -139,7 +143,7 @@ export default function PageEditor({ page, isNew = false }: PageEditorProps) {
           {!isNew && (
             <>
               <Link href={`/${slug}`} target="_blank">
-                <Button variant="outline" className="border-white/10 text-gray-400 hover:text-white">
+                <Button variant="outline" className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30">
                   <Eye className="w-4 h-4 mr-2" />
                   Vorschau
                 </Button>
@@ -175,63 +179,75 @@ export default function PageEditor({ page, isNew = false }: PageEditorProps) {
         </div>
       )}
 
-      {/* Editor Tabs */}
-      <Tabs defaultValue="content" className="space-y-6">
-        <TabsList className="bg-[#141414] border border-white/10">
-          <TabsTrigger value="content" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white">
-            Inhalt
-          </TabsTrigger>
-          <TabsTrigger value="seo" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white">
-            SEO
-          </TabsTrigger>
-          <TabsTrigger value="settings" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white">
-            Einstellungen
-          </TabsTrigger>
-        </TabsList>
+      {/* Dynamischer Editor basierend auf page_type */}
+      {isHomepage ? (
+        // Homepage: Sektions-basierter Editor
+        <HomepageEditorContent />
+      ) : (
+        // Andere Seiten: Standard Editor mit Tabs
+        <Tabs defaultValue="content" className="space-y-6">
+          <TabsList className="bg-[#141414] border border-white/10">
+            <TabsTrigger value="content" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white">
+              Inhalt
+            </TabsTrigger>
+            <TabsTrigger value="seo" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white">
+              SEO
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-white">
+              Einstellungen
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Content Tab */}
-        <TabsContent value="content" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-[#141414] border border-white/10 rounded-xl p-6 space-y-6">
-                <TextField
-                  label="Titel"
-                  name="title"
-                  value={title}
-                  onChange={setTitle}
-                  required
-                  placeholder="Seitentitel"
-                />
-                <SlugField
-                  value={slug}
-                  onChange={setSlug}
-                  sourceValue={title}
-                  baseUrl="https://dz-photo.at"
-                  required
-                />
+          {/* Content Tab */}
+          <TabsContent value="content" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-6">
+                <div className="bg-[#141414] border border-white/10 rounded-xl p-6 space-y-6">
+                  <TextField
+                    label="Titel"
+                    name="title"
+                    value={title}
+                    onChange={setTitle}
+                    required
+                    placeholder="Seitentitel"
+                  />
+                  <SlugField
+                    value={slug}
+                    onChange={setSlug}
+                    sourceValue={title}
+                    baseUrl="https://dz-photo.at"
+                    required
+                    disabled={isHomepage} // Homepage slug sollte nicht geändert werden
+                  />
+                </div>
+                <div className="bg-[#141414] border border-white/10 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-white mb-4">Inhalt</h3>
+                  <LexicalEditor
+                    initialContent={content}
+                    onChange={setContent}
+                    placeholder="Seiteninhalt..."
+                    minHeight="400px"
+                  />
+                </div>
               </div>
-              <div className="bg-[#141414] border border-white/10 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">Inhalt</h3>
-                <LexicalEditor
-                  initialContent={content}
-                  onChange={setContent}
-                  placeholder="Seiteninhalt..."
-                  minHeight="400px"
-                />
+              <div className="space-y-6">
+                <div className="bg-[#141414] border border-white/10 rounded-xl p-6">
+                  <SelectField
+                    label="Seitentyp"
+                    value={pageType}
+                    onChange={setPageType}
+                    options={pageTypeOptions}
+                    disabled={!canChangePageType}
+                  />
+                  {!canChangePageType && (
+                    <p className="text-xs text-gray-500 mt-2">
+                      Der Seitentyp kann bei der Startseite nicht geändert werden.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-            <div className="space-y-6">
-              <div className="bg-[#141414] border border-white/10 rounded-xl p-6">
-                <SelectField
-                  label="Seitentyp"
-                  value={pageType}
-                  onChange={setPageType}
-                  options={pageTypeOptions}
-                />
-              </div>
-            </div>
-          </div>
-        </TabsContent>
+          </TabsContent>
 
         {/* SEO Tab */}
         <TabsContent value="seo" className="space-y-6">
@@ -267,6 +283,7 @@ export default function PageEditor({ page, isNew = false }: PageEditorProps) {
           </div>
         </TabsContent>
       </Tabs>
+      )}
     </div>
   );
 }

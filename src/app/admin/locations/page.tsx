@@ -35,13 +35,13 @@ export default async function LocationsPage() {
       <div className="p-6">
         <div className="flex justify-between items-center mb-6">
           <div className="flex gap-2">
-            <Button variant="outline" className="border-white/10 text-gray-400 hover:text-white">
+            <Button variant="outline" className="border-white/30 bg-[#1A1A1A] text-white hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-white">
               Alle
             </Button>
-            <Button variant="ghost" className="text-gray-400 hover:text-white">
+            <Button variant="ghost" className="text-white bg-[#1A1A1A] hover:bg-[#D4AF37] hover:text-white">
               Veröffentlicht
             </Button>
-            <Button variant="ghost" className="text-gray-400 hover:text-white">
+            <Button variant="ghost" className="text-white bg-[#1A1A1A] hover:bg-[#D4AF37] hover:text-white">
               Entwürfe
             </Button>
           </div>
@@ -93,26 +93,26 @@ export default async function LocationsPage() {
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
                       <Link href={`/locations/${location.slug}`} target="_blank">
-                        <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+                        <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                           <Eye className="w-4 h-4" />
                         </Button>
                       </Link>
                       <Link href={`/admin/locations/${location.id}`}>
-                        <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+                        <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                           <Edit className="w-4 h-4" />
                         </Button>
                       </Link>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+                          <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                             <MoreHorizontal className="w-4 h-4" />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="bg-[#141414] border-white/10">
-                          <DropdownMenuItem className="text-white hover:bg-white/10 cursor-pointer">
+                          <DropdownMenuItem className="text-white hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] focus:bg-[#D4AF37]/20 focus:text-[#D4AF37] cursor-pointer">
                             Duplizieren
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-400 hover:bg-red-500/10 cursor-pointer">
+                          <DropdownMenuItem className="text-red-400 hover:bg-red-500/20 hover:text-red-300 focus:bg-red-500/20 focus:text-red-300 cursor-pointer">
                             Löschen
                           </DropdownMenuItem>
                         </DropdownMenuContent>

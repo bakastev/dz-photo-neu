@@ -2,11 +2,13 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import type { CookieOptions } from '@supabase/ssr';
 import type { AdminUser } from './auth';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://qljgbskxopjkivkcuypu.supabase.co';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsamdic2t4b3Bqa2l2a2N1eXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxMzU1OTcsImV4cCI6MjA3OTcxMTU5N30.2InM7AGTwNB8MvMy2RJGIekO3aGgLSB2utQPL1H7dYM';
 
-// Server Client (für Server Components & API Routes)
+// Server Client (für Server Components)
 export async function createServerSupabaseClient() {
   const cookieStore = await cookies();
   
@@ -26,6 +28,44 @@ export async function createServerSupabaseClient() {
       },
     },
   });
+}
+
+// API Route Client (für API Routes - liest Cookies aus Request und setzt sie in Response)
+export function createApiSupabaseClient(request: NextRequest) {
+  let response = NextResponse.next();
+  
+  const supabaseClient = createServerClient(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      getAll() {
+        const cookies = request.cookies.getAll();
+        // Log cookies for debugging (only in development)
+        if (process.env.NODE_ENV === 'development') {
+          const cookieNames = cookies.map(c => c.name).join(', ');
+          console.log('🍪 [API Client] Cookies found:', cookieNames || 'NO COOKIES');
+          // Log all cookie values for debugging
+          cookies.forEach(c => {
+            console.log(`  - ${c.name}: ${c.value.substring(0, 20)}...`);
+          });
+        }
+        return cookies;
+      },
+      setAll(cookiesToSet: { name: string; value: string; options?: CookieOptions }[]) {
+        // Update request cookies
+        cookiesToSet.forEach(({ name, value }) => {
+          request.cookies.set(name, value);
+        });
+        // Update response cookies - CRITICAL for session refresh
+        cookiesToSet.forEach(({ name, value, options }) => {
+          response.cookies.set(name, value, options);
+        });
+      },
+    },
+  });
+  
+  return {
+    client: supabaseClient,
+    getResponse: () => response,
+  };
 }
 
 // Auth Helper Functions (Server-side only)
@@ -54,32 +94,51 @@ export async function getUser() {
 }
 
 export async function getAdminUser(): Promise<AdminUser | null> {
-  const supabase = await createServerSupabaseClient();
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
-  
-  if (userError || !user) {
+  try {
+    const supabase = await createServerSupabaseClient();
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError) {
+      console.error('❌ Auth error in getAdminUser:', userError);
+      return null;
+    }
+    
+    if (!user) {
+      console.log('❌ No user in getAdminUser');
+      return null;
+    }
+    
+    console.log('🔍 Checking admin_users for user:', user.id);
+    // Get admin user profile
+    const { data: adminUser, error: profileError } = await supabase
+      .from('admin_users')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+    
+    if (profileError) {
+      console.error('❌ Profile error in getAdminUser:', profileError);
+      return null;
+    }
+    
+    if (!adminUser) {
+      console.log('❌ No admin user found for user:', user.id);
+      return null;
+    }
+    
+    console.log('✅ Admin user found:', adminUser.email);
+    return {
+      id: user.id,
+      email: user.email || '',
+      role: adminUser.role || 'editor',
+      name: adminUser.name,
+      avatar_url: adminUser.avatar_url,
+      created_at: adminUser.created_at,
+    };
+  } catch (err: any) {
+    console.error('❌ Exception in getAdminUser:', err);
     return null;
   }
-  
-  // Get admin user profile
-  const { data: adminUser, error: profileError } = await supabase
-    .from('admin_users')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-  
-  if (profileError || !adminUser) {
-    return null;
-  }
-  
-  return {
-    id: user.id,
-    email: user.email || '',
-    role: adminUser.role || 'editor',
-    name: adminUser.name,
-    avatar_url: adminUser.avatar_url,
-    created_at: adminUser.created_at,
-  };
 }
 
 export async function isAdmin(): Promise<boolean> {

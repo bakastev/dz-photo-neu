@@ -150,7 +150,7 @@ export default function FotoboxEditor({ service, isNew = false }: FotoboxEditorP
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/admin/fotobox">
-            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
               <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
@@ -167,7 +167,7 @@ export default function FotoboxEditor({ service, isNew = false }: FotoboxEditorP
           {!isNew && (
             <>
               <Link href={`/fotobox/${slug}`} target="_blank">
-                <Button variant="outline" className="border-white/10 text-gray-400 hover:text-white">
+                <Button variant="outline" className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30">
                   <Eye className="w-4 h-4 mr-2" />
                   Vorschau
                 </Button>

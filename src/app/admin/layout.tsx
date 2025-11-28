@@ -1,28 +1,46 @@
-import { redirect } from 'next/navigation';
-import { getAdminUser } from '@/lib/auth-server';
-import AdminSidebar from '@/components/admin/AdminSidebar';
-import { Toaster } from '@/components/ui/toaster';
+import { createServerSupabaseClient } from '@/lib/auth-server';
+import SessionGuard from '@/components/admin/SessionGuard';
+import AdminLayoutContent from '@/components/admin/AdminLayoutContent';
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const adminUser = await getAdminUser();
+  // Try to get user on server side first
+  const supabase = await createServerSupabaseClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  let adminUserData = null;
+  
+  if (user) {
+    // Get admin user - RLS is disabled so this should work
+    const { data: adminUser } = await supabase
+      .from('admin_users')
+      .select('*')
+      .eq('id', user.id)
+      .single();
 
-  // Redirect to login if not authenticated
-  if (!adminUser) {
-    redirect('/admin-login');
+    if (adminUser) {
+      adminUserData = {
+        id: user.id,
+        email: user.email || '',
+        role: adminUser.role || 'editor',
+        name: adminUser.name,
+        avatar_url: adminUser.avatar_url,
+        created_at: adminUser.created_at,
+      };
+    }
   }
-
+  
+  // Let SessionGuard handle auth check on client side
+  // This avoids server-side cookie issues
   return (
-    <div className="min-h-screen bg-[#0A0A0A]">
-      <AdminSidebar user={adminUser} />
-      <main className="ml-64 min-h-screen transition-all duration-300">
+    <SessionGuard>
+      <AdminLayoutContent adminUserData={adminUserData}>
         {children}
-      </main>
-      <Toaster />
-    </div>
+      </AdminLayoutContent>
+    </SessionGuard>
   );
 }
 

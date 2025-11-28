@@ -65,7 +65,7 @@ export default async function FotoboxPage() {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <Link href={`/admin/fotobox/${service.id}`}>
-                      <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+                      <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                         <Edit className="w-4 h-4" />
                       </Button>
                     </Link>

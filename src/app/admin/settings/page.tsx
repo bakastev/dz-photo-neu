@@ -69,6 +69,13 @@ export default function SettingsPage() {
   const [instagramUrl, setInstagramUrl] = useState('');
   const [facebookUrl, setFacebookUrl] = useState('');
 
+  // Color Settings
+  const [colorPrimary, setColorPrimary] = useState('#D4AF37');
+  const [colorBackground, setColorBackground] = useState('#0A0A0A');
+  const [colorSurface, setColorSurface] = useState('#141414');
+  const [colorText, setColorText] = useState('#FFFFFF');
+  const [colorGoldLight, setColorGoldLight] = useState('#F0EBD2');
+
   // Load settings on mount
   useEffect(() => {
     loadSettings();
@@ -100,6 +107,11 @@ export default function SettingsPage() {
         setMetaConversionToken(data.meta_conversion_api_token || '');
         setInstagramUrl(data.instagram_url || '');
         setFacebookUrl(data.facebook_url || '');
+        setColorPrimary(data.color_primary || '#D4AF37');
+        setColorBackground(data.color_background || '#0A0A0A');
+        setColorSurface(data.color_surface || '#141414');
+        setColorText(data.color_text || '#FFFFFF');
+        setColorGoldLight(data.color_gold_light || '#F0EBD2');
       }
     } catch (err: any) {
       console.error('Error loading settings:', err);
@@ -117,10 +129,27 @@ export default function SettingsPage() {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error loading admin users:', error);
+        console.error('Error details:', {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint,
+        });
+        throw error;
+      }
+      
+      console.log('Loaded admin users:', data);
       setAdminUsers(data || []);
     } catch (err: any) {
       console.error('Error loading admin users:', err);
+      // Show error to user
+      toast({
+        title: "Fehler",
+        description: `Admin-User konnten nicht geladen werden: ${err.message || 'Unbekannter Fehler'}`,
+        variant: "destructive",
+      });
     }
   };
 
@@ -136,50 +165,55 @@ export default function SettingsPage() {
 
     setInviting(true);
     try {
-      const supabase = createBrowserSupabaseClient();
-      
-      // Check if user already exists
-      const { data: existingUser } = await supabase
-        .from('admin_users')
-        .select('id')
-        .eq('email', newAdminEmail)
-        .single();
+      // Call API route for admin invitation
+      // Include credentials to ensure cookies are sent
+      const response = await fetch('/api/admin/invite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Ensure cookies are sent with the request
+        body: JSON.stringify({
+          email: newAdminEmail,
+          role: newAdminRole || 'editor',
+        }),
+      });
 
-      if (existingUser) {
-        toast({
-          title: "Benutzer existiert bereits",
-          description: "Diese E-Mail-Adresse ist bereits als Admin registriert.",
-          variant: "destructive",
-        });
-        setInviting(false);
-        return;
+      // Get response text first to handle empty responses
+      const responseText = await response.text();
+      let data;
+      
+      if (!responseText || responseText.trim() === '') {
+        throw new Error('Empty response from server');
+      }
+      
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Failed to parse response:', responseText);
+        throw new Error(`Invalid response from server: ${responseText.substring(0, 200)}`);
       }
 
-      // Send invite via Supabase Auth (Magic Link)
-      const { error: inviteError } = await supabase.auth.admin.inviteUserByEmail(newAdminEmail);
-      
-      if (inviteError) {
-        // Fallback: Just add to admin_users table with a placeholder ID
-        // The user will need to sign up manually
-        toast({
-          title: "Hinweis",
-          description: "Der Benutzer muss sich selbst registrieren. Fügen Sie ihn nach der Registrierung manuell als Admin hinzu.",
-          variant: "default",
-        });
-      } else {
-        toast({
-          title: "Einladung gesendet!",
-          description: `Eine Einladung wurde an ${newAdminEmail} gesendet.`,
-        });
+      if (!response.ok) {
+        const errorMessage = data.details 
+          ? `${data.error}: ${data.details}` 
+          : data.error || 'Einladung fehlgeschlagen';
+        throw new Error(errorMessage);
       }
+
+      toast({
+        title: "Einladung gesendet!",
+        description: data.note || `Eine Einladung wurde an ${newAdminEmail} gesendet. Bitte prüfen Sie auch den Spam-Ordner.`,
+      });
 
       setNewAdminEmail('');
+      setNewAdminRole('editor');
       loadAdminUsers();
     } catch (err: any) {
       console.error('Error inviting admin:', err);
       toast({
         title: "Fehler",
-        description: "Die Einladung konnte nicht gesendet werden. Der Benutzer muss sich selbst registrieren.",
+        description: err.message || "Die Einladung konnte nicht gesendet werden.",
         variant: "destructive",
       });
     } finally {
@@ -261,6 +295,11 @@ export default function SettingsPage() {
           meta_conversion_api_token: metaConversionToken || null,
           instagram_url: instagramUrl || null,
           facebook_url: facebookUrl || null,
+          color_primary: colorPrimary,
+          color_background: colorBackground,
+          color_surface: colorSurface,
+          color_text: colorText,
+          color_gold_light: colorGoldLight,
           updated_at: new Date().toISOString(),
         })
         .eq('id', 'main');
@@ -534,9 +573,9 @@ export default function SettingsPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="bg-[#141414] border-white/10">
-                        <SelectItem value="admin">Admin</SelectItem>
-                        <SelectItem value="editor">Editor</SelectItem>
-                        <SelectItem value="viewer">Viewer</SelectItem>
+                        <SelectItem value="admin" className="text-white data-[highlighted]:bg-[#D4AF37]/20 data-[highlighted]:text-[#D4AF37]">Admin</SelectItem>
+                        <SelectItem value="editor" className="text-white data-[highlighted]:bg-[#D4AF37]/20 data-[highlighted]:text-[#D4AF37]">Editor</SelectItem>
+                        <SelectItem value="viewer" className="text-white data-[highlighted]:bg-[#D4AF37]/20 data-[highlighted]:text-[#D4AF37]">Viewer</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -555,10 +594,6 @@ export default function SettingsPage() {
                     </Button>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500 mt-3">
-                  Hinweis: Der eingeladene Benutzer muss sich über Supabase Auth registrieren. 
-                  Nach der Registrierung wird er automatisch als Admin hinzugefügt.
-                </p>
               </div>
 
               {/* Current Admins List */}
@@ -595,9 +630,9 @@ export default function SettingsPage() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent className="bg-[#141414] border-white/10">
-                              <SelectItem value="admin">Admin</SelectItem>
-                              <SelectItem value="editor">Editor</SelectItem>
-                              <SelectItem value="viewer">Viewer</SelectItem>
+                              <SelectItem value="admin" className="text-white data-[highlighted]:bg-[#D4AF37]/20 data-[highlighted]:text-[#D4AF37]">Admin</SelectItem>
+                              <SelectItem value="editor" className="text-white data-[highlighted]:bg-[#D4AF37]/20 data-[highlighted]:text-[#D4AF37]">Editor</SelectItem>
+                              <SelectItem value="viewer" className="text-white data-[highlighted]:bg-[#D4AF37]/20 data-[highlighted]:text-[#D4AF37]">Viewer</SelectItem>
                             </SelectContent>
                           </Select>
                           <Button
@@ -628,37 +663,164 @@ export default function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="appearance">
-            <div className="bg-[#141414] border border-white/10 rounded-xl p-6 space-y-6">
+            <div className="border border-white/10 rounded-xl p-6 space-y-6" style={{ backgroundColor: 'var(--admin-color-surface, #141414)' }}>
               <h2 className="text-lg font-semibold text-white">Erscheinungsbild</h2>
               <p className="text-gray-400">
-                Das Design-System von DZ-Photo verwendet folgende Farben:
+                Passen Sie die Farben des Design-Systems an:
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="p-4 rounded-lg border border-white/10">
-                  <div className="w-full h-12 rounded bg-[#D4AF37] mb-2" />
-                  <p className="text-sm text-white">Gold (Primär)</p>
-                  <p className="text-xs text-gray-500">#D4AF37</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Gold (Primär) */}
+                <div className="space-y-2">
+                  <Label htmlFor="colorPrimary" className="text-white flex items-center gap-2">
+                    <div className="w-6 h-6 rounded border border-white/20" style={{ backgroundColor: colorPrimary }} />
+                    Gold (Primär)
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="colorPrimary"
+                      type="color"
+                      value={colorPrimary}
+                      onChange={(e) => setColorPrimary(e.target.value)}
+                      className="w-20 h-10 p-1 bg-[#1A1A1A] border-white/10 cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={colorPrimary}
+                      onChange={(e) => setColorPrimary(e.target.value)}
+                      placeholder="#D4AF37"
+                      className="flex-1 bg-[#1A1A1A] border-white/10 text-white font-mono"
+                    />
+                  </div>
                 </div>
-                <div className="p-4 rounded-lg border border-white/10">
-                  <div className="w-full h-12 rounded bg-[#0A0A0A] mb-2 border border-white/10" />
-                  <p className="text-sm text-white">Hintergrund</p>
-                  <p className="text-xs text-gray-500">#0A0A0A</p>
+
+                {/* Hintergrund */}
+                <div className="space-y-2">
+                  <Label htmlFor="colorBackground" className="text-white flex items-center gap-2">
+                    <div className="w-6 h-6 rounded border border-white/20" style={{ backgroundColor: colorBackground }} />
+                    Hintergrund
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="colorBackground"
+                      type="color"
+                      value={colorBackground}
+                      onChange={(e) => setColorBackground(e.target.value)}
+                      className="w-20 h-10 p-1 bg-[#1A1A1A] border-white/10 cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={colorBackground}
+                      onChange={(e) => setColorBackground(e.target.value)}
+                      placeholder="#0A0A0A"
+                      className="flex-1 bg-[#1A1A1A] border-white/10 text-white font-mono"
+                    />
+                  </div>
                 </div>
-                <div className="p-4 rounded-lg border border-white/10">
-                  <div className="w-full h-12 rounded bg-[#141414] mb-2" />
-                  <p className="text-sm text-white">Oberfläche</p>
-                  <p className="text-xs text-gray-500">#141414</p>
+
+                {/* Oberfläche */}
+                <div className="space-y-2">
+                  <Label htmlFor="colorSurface" className="text-white flex items-center gap-2">
+                    <div className="w-6 h-6 rounded border border-white/20" style={{ backgroundColor: colorSurface }} />
+                    Oberfläche
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="colorSurface"
+                      type="color"
+                      value={colorSurface}
+                      onChange={(e) => setColorSurface(e.target.value)}
+                      className="w-20 h-10 p-1 bg-[#1A1A1A] border-white/10 cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={colorSurface}
+                      onChange={(e) => setColorSurface(e.target.value)}
+                      placeholder="#141414"
+                      className="flex-1 bg-[#1A1A1A] border-white/10 text-white font-mono"
+                    />
+                  </div>
                 </div>
-                <div className="p-4 rounded-lg border border-white/10">
-                  <div className="w-full h-12 rounded bg-white mb-2" />
-                  <p className="text-sm text-white">Text</p>
-                  <p className="text-xs text-gray-500">#FFFFFF</p>
+
+                {/* Text */}
+                <div className="space-y-2">
+                  <Label htmlFor="colorText" className="text-white flex items-center gap-2">
+                    <div className="w-6 h-6 rounded border border-white/20" style={{ backgroundColor: colorText }} />
+                    Text
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="colorText"
+                      type="color"
+                      value={colorText}
+                      onChange={(e) => setColorText(e.target.value)}
+                      className="w-20 h-10 p-1 bg-[#1A1A1A] border-white/10 cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={colorText}
+                      onChange={(e) => setColorText(e.target.value)}
+                      placeholder="#FFFFFF"
+                      className="flex-1 bg-[#1A1A1A] border-white/10 text-white font-mono"
+                    />
+                  </div>
+                </div>
+
+                {/* Gold Light */}
+                <div className="space-y-2">
+                  <Label htmlFor="colorGoldLight" className="text-white flex items-center gap-2">
+                    <div className="w-6 h-6 rounded border border-white/20" style={{ backgroundColor: colorGoldLight }} />
+                    Gold (Hell)
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="colorGoldLight"
+                      type="color"
+                      value={colorGoldLight}
+                      onChange={(e) => setColorGoldLight(e.target.value)}
+                      className="w-20 h-10 p-1 bg-[#1A1A1A] border-white/10 cursor-pointer"
+                    />
+                    <Input
+                      type="text"
+                      value={colorGoldLight}
+                      onChange={(e) => setColorGoldLight(e.target.value)}
+                      placeholder="#F0EBD2"
+                      className="flex-1 bg-[#1A1A1A] border-white/10 text-white font-mono"
+                    />
+                  </div>
                 </div>
               </div>
-              
-              <div className="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-                <p className="text-sm text-yellow-400">
-                  ⚠️ Das Farbschema ist fest im Code definiert und kann derzeit nicht über das Admin-Panel geändert werden.
+
+              {/* Preview */}
+              <div className="mt-6 p-4 bg-[#1A1A1A] rounded-lg border border-white/10">
+                <h3 className="text-sm font-medium text-white mb-3">Vorschau</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="p-3 rounded-lg border border-white/10" style={{ backgroundColor: colorSurface }}>
+                    <div className="w-full h-16 rounded mb-2 shadow-lg" style={{ backgroundColor: colorPrimary }} />
+                    <p className="text-xs font-medium mb-1" style={{ color: colorText }}>Gold (Primär)</p>
+                    <p className="text-xs font-mono opacity-70" style={{ color: colorText }}>{colorPrimary}</p>
+                  </div>
+                  <div className="p-3 rounded-lg border border-white/10" style={{ backgroundColor: colorSurface }}>
+                    <div className="w-full h-16 rounded mb-2 border-2 border-white/20" style={{ backgroundColor: colorBackground }} />
+                    <p className="text-xs font-medium mb-1" style={{ color: colorText }}>Hintergrund</p>
+                    <p className="text-xs font-mono opacity-70" style={{ color: colorText }}>{colorBackground}</p>
+                  </div>
+                  <div className="p-3 rounded-lg border border-white/10" style={{ backgroundColor: colorSurface }}>
+                    <div className="w-full h-16 rounded mb-2 border border-white/10" style={{ backgroundColor: colorSurface }} />
+                    <p className="text-xs font-medium mb-1" style={{ color: colorText }}>Oberfläche</p>
+                    <p className="text-xs font-mono opacity-70" style={{ color: colorText }}>{colorSurface}</p>
+                  </div>
+                  <div className="p-3 rounded-lg border border-white/10" style={{ backgroundColor: colorSurface }}>
+                    <div className="w-full h-16 rounded mb-2 shadow-lg" style={{ backgroundColor: colorText }} />
+                    <p className="text-xs font-medium mb-1" style={{ color: colorText }}>Text</p>
+                    <p className="text-xs font-mono opacity-70" style={{ color: colorText }}>{colorText}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                <p className="text-sm text-blue-400">
+                  💡 Hinweis: Nach dem Speichern müssen Sie die Seite neu laden, damit die neuen Farben im gesamten Design-System angewendet werden.
                 </p>
               </div>
             </div>
@@ -667,11 +829,22 @@ export default function SettingsPage() {
 
         {/* Save Button */}
         <div className="flex justify-end mt-6">
-          <Button
-            onClick={handleSave}
-            disabled={saving}
-            className="bg-gradient-to-r from-[#D4AF37] to-[#B8960F] hover:from-[#E5C158] hover:to-[#D4AF37]"
-          >
+                  <Button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="text-white"
+                    style={{
+                      background: `linear-gradient(to right, var(--admin-color-primary, #D4AF37), #B8960F)`,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!saving) {
+                        e.currentTarget.style.background = `linear-gradient(to right, #E5C158, var(--admin-color-primary, #D4AF37))`;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = `linear-gradient(to right, var(--admin-color-primary, #D4AF37), #B8960F)`;
+                    }}
+                  >
             {saving ? (
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
             ) : (

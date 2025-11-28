@@ -160,7 +160,7 @@ function WeddingEditorInner({ wedding, isNew = false }: WeddingEditorProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/admin/weddings">
-            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
               <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
@@ -177,7 +177,7 @@ function WeddingEditorInner({ wedding, isNew = false }: WeddingEditorProps) {
           <Button
             variant="outline"
             onClick={() => setIsPreviewOpen(true)}
-            className="border-white/10 text-gray-400 hover:text-white"
+            className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30"
           >
             <Monitor className="w-4 h-4 mr-2" />
             Live-Vorschau
@@ -185,7 +185,7 @@ function WeddingEditorInner({ wedding, isNew = false }: WeddingEditorProps) {
           {!isNew && (
             <>
               <Link href={`/hochzeit/${slug}`} target="_blank">
-                <Button variant="outline" className="border-white/10 text-gray-400 hover:text-white">
+                <Button variant="outline" className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30">
                   <Eye className="w-4 h-4 mr-2" />
                   Im Browser
                 </Button>

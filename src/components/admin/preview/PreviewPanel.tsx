@@ -100,7 +100,7 @@ export default function PreviewPanel({ type, slug }: PreviewPanelProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-gray-400 hover:text-white"
+                className="text-white hover:bg-white/10"
                 onClick={() => window.open(previewUrl, '_blank')}
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
@@ -111,7 +111,7 @@ export default function PreviewPanel({ type, slug }: PreviewPanelProps) {
               variant="ghost"
               size="icon"
               onClick={() => setIsPreviewOpen(false)}
-              className="text-gray-400 hover:text-white"
+              className="text-white hover:bg-white/10"
             >
               <X className="w-5 h-5" />
             </Button>

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
+import CookieConsentBanner from '@/components/shared/CookieConsent'
+import CookieBlockerScript from '@/components/shared/CookieBlockerScript'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -64,9 +66,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="de" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="de" className={`${inter.variable} ${playfair.variable}`} data-scroll-behavior="smooth">
+      <head>
+        <CookieBlockerScript />
+      </head>
       <body className={`${inter.className} min-h-screen bg-dark-background text-white antialiased`}>
         {children}
+        <CookieConsentBanner />
       </body>
     </html>
   )

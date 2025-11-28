@@ -26,13 +26,12 @@ import { useRouter } from 'next/navigation';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { name: 'Startseite', href: '/admin/homepage', icon: Home },
+  { name: 'Seiten', href: '/admin/pages', icon: FileStack },
   { name: 'Hochzeiten', href: '/admin/weddings', icon: Heart },
   { name: 'Locations', href: '/admin/locations', icon: MapPin },
   { name: 'Blog', href: '/admin/blog', icon: FileText },
   { name: 'Fotobox', href: '/admin/fotobox', icon: PartyPopper },
   { name: 'Bewertungen', href: '/admin/reviews', icon: Star },
-  { name: 'Seiten', href: '/admin/pages', icon: FileStack },
   { name: 'Medien', href: '/admin/media', icon: Image },
   { name: 'Einstellungen', href: '/admin/settings', icon: Settings },
 ];
@@ -53,16 +52,24 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
 
   const handleLogout = async () => {
     setLoggingOut(true);
-    const supabase = createBrowserSupabaseClient();
-    await supabase.auth.signOut();
-    router.push('/admin/login');
-    router.refresh();
+    try {
+      const supabase = createBrowserSupabaseClient();
+      await supabase.auth.signOut();
+      // Clear any cached data
+      window.localStorage.removeItem('dz-photo-supabase-auth');
+      // Redirect to login page with full page reload to ensure clean state
+      window.location.href = '/admin-login';
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if logout fails, redirect to login
+      window.location.href = '/admin-login';
+    }
   };
 
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 h-screen bg-[#0A0A0A] border-r border-white/10 transition-all duration-300',
+        'fixed left-0 top-0 z-40 h-screen bg-admin-background border-r border-white/10 transition-all duration-300',
         collapsed ? 'w-20' : 'w-64'
       )}
     >
@@ -70,7 +77,7 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
         {/* Logo */}
         <div className="flex items-center justify-between h-16 px-4 border-b border-white/10">
           <Link href="/admin" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B8960F] flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: `linear-gradient(to bottom right, var(--admin-color-primary, #D4AF37), #B8960F)` }}>
               <Camera className="w-5 h-5 text-white" />
             </div>
             {!collapsed && (
@@ -104,11 +111,16 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
                 className={cn(
                   'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200',
                   isActive
-                    ? 'bg-gradient-to-r from-[#D4AF37]/20 to-transparent text-[#D4AF37] border-l-2 border-[#D4AF37]'
+                    ? 'text-admin-primary border-l-2'
                     : 'text-gray-400 hover:text-white hover:bg-white/5'
                 )}
+                style={isActive ? {
+                  background: `linear-gradient(to right, var(--admin-color-primary, #D4AF37)33, transparent)`,
+                  borderColor: 'var(--admin-color-primary, #D4AF37)',
+                  color: 'var(--admin-color-primary, #D4AF37)'
+                } : undefined}
               >
-                <item.icon className={cn('w-5 h-5 flex-shrink-0', isActive && 'text-[#D4AF37]')} />
+                <item.icon className={cn('w-5 h-5 flex-shrink-0')} style={isActive ? { color: 'var(--admin-color-primary, #D4AF37)' } : undefined} />
                 {!collapsed && <span className="font-medium">{item.name}</span>}
               </Link>
             );
@@ -135,6 +147,30 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
             <LogOut className="w-5 h-5" />
             {!collapsed && <span>Abmelden</span>}
           </Button>
+          {!collapsed && (
+            <div className="mt-4 pt-4 border-t border-white/5">
+              <Link
+                href="https://growing-brands.de"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-gray-500 transition-colors text-center block"
+                style={{ '--hover-color': 'var(--admin-color-primary, #D4AF37)' } as React.CSSProperties}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = 'var(--admin-color-primary, #D4AF37)';
+                  const span = e.currentTarget.querySelector('span');
+                  if (span) span.style.color = 'var(--admin-color-primary, #D4AF37)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '';
+                  const span = e.currentTarget.querySelector('span');
+                  if (span) span.style.color = '';
+                }}
+              >
+                powered by{' '}
+                <span className="font-semibold text-gray-400">Growing Brands</span>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </aside>

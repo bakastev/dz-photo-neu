@@ -27,6 +27,7 @@ async function getFotoboxPackages(): Promise<FotoboxService[]> {
     .from('fotobox_services')
     .select('*')
     .eq('published', true)
+    .order('display_order', { ascending: true })
     .order('price', { ascending: true });
 
   if (error) {
@@ -107,13 +108,11 @@ export default async function FotoboxPage() {
                 </div>
                 
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold text-white mb-6">
-                  Unvergesslicher <span className="text-gold">Spaß</span>
+                  Fotobox mieten – wenige Klicks zum <span className="text-gold">must-have</span> für jede Party!
                 </h1>
                 
                 <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
-                  Die perfekte Ergänzung für Ihre Hochzeit oder Veranstaltung. 
-                  Professionelle Fotobox mit Sofortdruck, lustigen Requisiten und 
-                  unvergesslichen Erinnerungen für Ihre Gäste.
+                  Mietet hier eure Fotobox für die nächste Feier. Schnell, einfach und bequem. Ihr wählt ein Modell aus und wir kümmern uns um den Rest. Inklusive Lieferung, Aufbau, Einstellung, Abbau und Abholung. Lehnt euch zurück und konzentriert euch auf eure Feier, die Planung ist meist stressig genug!
                 </p>
 
                 <Link
@@ -136,7 +135,7 @@ export default async function FotoboxPage() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 reveal">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 reveal mb-16">
                 {premiumFeatures.map((feature, index) => (
                   <div
                     key={feature.title}
@@ -154,6 +153,26 @@ export default async function FotoboxPage() {
                     </p>
                   </div>
                 ))}
+              </div>
+
+              {/* Additional Info */}
+              <div className="max-w-4xl mx-auto reveal">
+                <div className="glass-card rounded-3xl p-8 md:p-12">
+                  <div className="prose prose-invert max-w-none">
+                    <p className="text-gray-300 text-lg leading-relaxed mb-6">
+                      <strong className="text-gold">Flexibel bleiben:</strong> Bestimmt vor jedem Durchgang, welches Layout das Foto haben soll. Wählt zwischen Fotostreifen, einem großen Foto oder vier kleinen Fotos.
+                    </p>
+                    <p className="text-gray-300 text-lg leading-relaxed mb-6">
+                      Direkt nach jedem Durchgang können eure Gäste die Bilder online bewundern, herunterladen, teilen und ausdrucken. Jeder Gast hat einen Code auf dem Foto, mit dem er nur sein eigenes Foto in der online Galerie einsehen kann. Ihr als Gastgeber erhaltet einen Code für die gesamte Galerie. Ein Ausdruck ist nicht genug? Kein Problem, es kann zwischen 0 – 5 Ausdrucken selbst ausgewählt werden.
+                    </p>
+                    <p className="text-gray-300 text-lg leading-relaxed mb-6">
+                      Fertigt bis zu <strong className="text-gold">400 Ausdrucke (800 bei Streifen)</strong> an, ohne das Material zu wechseln. Eure Gäste müssen nicht lange auf ihre Bilder warten: In spätestens <strong className="text-gold">neun Sekunden</strong> hält jeder sein fotografisches Kunstwerk in den Händen.
+                    </p>
+                    <p className="text-gray-300 text-lg leading-relaxed">
+                      <strong className="text-gold">Unternehmen</strong> können den Fotos ihre ganz eigene Handschrift verpassen. Layouts der Fotos, Hintergrund, Ablaufbildschirm und selbst die Fotobox kann in der corporate identity des Unternehmens erstrahlen.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </section>

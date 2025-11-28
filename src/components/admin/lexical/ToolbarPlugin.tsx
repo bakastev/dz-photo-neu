@@ -207,7 +207,7 @@ export default function ToolbarPlugin() {
         size="icon"
         onClick={() => editor.dispatchCommand(UNDO_COMMAND, undefined)}
         disabled={!canUndo}
-        className="text-gray-400 hover:text-white hover:bg-white/10 disabled:opacity-30"
+        className="text-white hover:bg-white/10 disabled:opacity-30"
       >
         <Undo className="w-4 h-4" />
       </Button>
@@ -216,7 +216,7 @@ export default function ToolbarPlugin() {
         size="icon"
         onClick={() => editor.dispatchCommand(REDO_COMMAND, undefined)}
         disabled={!canRedo}
-        className="text-gray-400 hover:text-white hover:bg-white/10 disabled:opacity-30"
+        className="text-white hover:bg-white/10 disabled:opacity-30"
       >
         <Redo className="w-4 h-4" />
       </Button>
@@ -226,34 +226,34 @@ export default function ToolbarPlugin() {
       {/* Block Type Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="gap-2 text-gray-400 hover:text-white hover:bg-white/10">
+          <Button variant="ghost" className="gap-2 text-white hover:bg-white/10">
             {blockTypeToIcon[blockType] || <Type className="w-4 h-4" />}
             <span className="text-sm">{blockTypeToName[blockType] || 'Absatz'}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-[#141414] border-white/10">
-          <DropdownMenuItem onClick={formatParagraph} className="text-white hover:bg-white/10 cursor-pointer">
+          <DropdownMenuItem onClick={formatParagraph} className="text-white hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] focus:bg-[#D4AF37]/20 focus:text-[#D4AF37] cursor-pointer">
             <Type className="w-4 h-4 mr-2" /> Absatz
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => formatHeading('h1')} className="text-white hover:bg-white/10 cursor-pointer">
+          <DropdownMenuItem onClick={() => formatHeading('h1')} className="text-white hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] focus:bg-[#D4AF37]/20 focus:text-[#D4AF37] cursor-pointer">
             <Heading1 className="w-4 h-4 mr-2" /> Überschrift 1
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => formatHeading('h2')} className="text-white hover:bg-white/10 cursor-pointer">
+          <DropdownMenuItem onClick={() => formatHeading('h2')} className="text-white hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] focus:bg-[#D4AF37]/20 focus:text-[#D4AF37] cursor-pointer">
             <Heading2 className="w-4 h-4 mr-2" /> Überschrift 2
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => formatHeading('h3')} className="text-white hover:bg-white/10 cursor-pointer">
+          <DropdownMenuItem onClick={() => formatHeading('h3')} className="text-white hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] focus:bg-[#D4AF37]/20 focus:text-[#D4AF37] cursor-pointer">
             <Heading3 className="w-4 h-4 mr-2" /> Überschrift 3
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined)} className="text-white hover:bg-white/10 cursor-pointer">
+          <DropdownMenuItem onClick={() => editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined)} className="text-white hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] focus:bg-[#D4AF37]/20 focus:text-[#D4AF37] cursor-pointer">
             <List className="w-4 h-4 mr-2" /> Aufzählung
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)} className="text-white hover:bg-white/10 cursor-pointer">
+          <DropdownMenuItem onClick={() => editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)} className="text-white hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] focus:bg-[#D4AF37]/20 focus:text-[#D4AF37] cursor-pointer">
             <ListOrdered className="w-4 h-4 mr-2" /> Nummerierung
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={formatQuote} className="text-white hover:bg-white/10 cursor-pointer">
+          <DropdownMenuItem onClick={formatQuote} className="text-white hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] focus:bg-[#D4AF37]/20 focus:text-[#D4AF37] cursor-pointer">
             <Quote className="w-4 h-4 mr-2" /> Zitat
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={formatCode} className="text-white hover:bg-white/10 cursor-pointer">
+          <DropdownMenuItem onClick={formatCode} className="text-white hover:bg-[#D4AF37]/20 hover:text-[#D4AF37] focus:bg-[#D4AF37]/20 focus:text-[#D4AF37] cursor-pointer">
             <Code className="w-4 h-4 mr-2" /> Code-Block
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -266,7 +266,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="icon"
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold')}
-        className={cn('text-gray-400 hover:text-white hover:bg-white/10', isBold && 'bg-white/10 text-white')}
+        className={cn('text-white hover:bg-white/10', isBold && 'bg-white/10')}
       >
         <Bold className="w-4 h-4" />
       </Button>
@@ -274,7 +274,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="icon"
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')}
-        className={cn('text-gray-400 hover:text-white hover:bg-white/10', isItalic && 'bg-white/10 text-white')}
+        className={cn('text-white hover:bg-white/10', isItalic && 'bg-white/10')}
       >
         <Italic className="w-4 h-4" />
       </Button>
@@ -282,7 +282,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="icon"
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline')}
-        className={cn('text-gray-400 hover:text-white hover:bg-white/10', isUnderline && 'bg-white/10 text-white')}
+        className={cn('text-white hover:bg-white/10', isUnderline && 'bg-white/10')}
       >
         <Underline className="w-4 h-4" />
       </Button>
@@ -290,7 +290,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="icon"
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough')}
-        className={cn('text-gray-400 hover:text-white hover:bg-white/10', isStrikethrough && 'bg-white/10 text-white')}
+        className={cn('text-white hover:bg-white/10', isStrikethrough && 'bg-white/10')}
       >
         <Strikethrough className="w-4 h-4" />
       </Button>
@@ -298,7 +298,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="icon"
         onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code')}
-        className={cn('text-gray-400 hover:text-white hover:bg-white/10', isCode && 'bg-white/10 text-white')}
+        className={cn('text-white hover:bg-white/10', isCode && 'bg-white/10')}
       >
         <Code className="w-4 h-4" />
       </Button>
@@ -310,7 +310,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="icon"
         onClick={insertLink}
-        className={cn('text-gray-400 hover:text-white hover:bg-white/10', isLink && 'bg-white/10 text-[#D4AF37]')}
+        className={cn('text-white hover:bg-white/10', isLink && 'bg-white/10 text-[#D4AF37]')}
       >
         <Link2 className="w-4 h-4" />
       </Button>
@@ -322,7 +322,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="icon"
         onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left')}
-        className="text-gray-400 hover:text-white hover:bg-white/10"
+        className="text-white hover:bg-white/10"
       >
         <AlignLeft className="w-4 h-4" />
       </Button>
@@ -330,7 +330,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="icon"
         onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center')}
-        className="text-gray-400 hover:text-white hover:bg-white/10"
+        className="text-white hover:bg-white/10"
       >
         <AlignCenter className="w-4 h-4" />
       </Button>
@@ -338,7 +338,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="icon"
         onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right')}
-        className="text-gray-400 hover:text-white hover:bg-white/10"
+        className="text-white hover:bg-white/10"
       >
         <AlignRight className="w-4 h-4" />
       </Button>
@@ -346,7 +346,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="icon"
         onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify')}
-        className="text-gray-400 hover:text-white hover:bg-white/10"
+        className="text-white hover:bg-white/10"
       >
         <AlignJustify className="w-4 h-4" />
       </Button>
@@ -358,7 +358,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="icon"
         onClick={() => editor.dispatchCommand(INSERT_HORIZONTAL_RULE_COMMAND, undefined)}
-        className="text-gray-400 hover:text-white hover:bg-white/10"
+        className="text-white hover:bg-white/10"
       >
         <Minus className="w-4 h-4" />
       </Button>

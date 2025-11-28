@@ -15,6 +15,12 @@ const config: Config = {
         'dark-background': '#121212',
         'heart-color': '#D0B888',
         'romantic-overlay': 'rgba(208, 184, 136, 0.15)',
+        // Admin colors (dynamisch aus DB)
+        'admin-primary': 'var(--admin-color-primary, #D4AF37)',
+        'admin-background': 'var(--admin-color-background, #0A0A0A)',
+        'admin-surface': 'var(--admin-color-surface, #141414)',
+        'admin-text': 'var(--admin-color-text, #FFFFFF)',
+        'admin-gold-light': 'var(--admin-color-gold-light, #F0EBD2)',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -38,7 +38,7 @@ export async function getHomepageData() {
       getHomepageSections(),
       supabase.from('weddings').select('*').eq('featured', true).eq('published', true).limit(6),
       supabase.from('locations').select('*').eq('published', true).limit(8),
-      supabase.from('fotobox_services').select('*').eq('published', true).limit(3),
+      supabase.from('fotobox_services').select('*').eq('published', true).order('display_order', { ascending: true }).order('price', { ascending: true }).limit(3),
       supabase.from('blog_posts').select('*').eq('published', true).order('published_at', { ascending: false }).limit(6),
       supabase.from('reviews').select('*').eq('published', true).limit(6)
     ]);
