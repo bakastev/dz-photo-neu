@@ -33,14 +33,16 @@ export async function getHomepageData() {
       { data: locations, error: locationsError },
       { data: fotoboxServices, error: fotoboxError },
       { data: blogPosts, error: blogError },
-      { data: reviews, error: reviewsError }
+      { data: reviews, error: reviewsError },
+      { data: siteSettings, error: settingsError }
     ] = await Promise.all([
       getHomepageSections(),
       supabase.from('weddings').select('*').eq('featured', true).eq('published', true).limit(6),
       supabase.from('locations').select('*').eq('published', true).limit(8),
       supabase.from('fotobox_services').select('*').eq('published', true).order('display_order', { ascending: true }).order('price', { ascending: true }).limit(3),
       supabase.from('blog_posts').select('*').eq('published', true).order('published_at', { ascending: false }).limit(6),
-      supabase.from('reviews').select('*').eq('published', true).limit(6)
+      supabase.from('reviews').select('*').eq('published', true).limit(6),
+      supabase.from('site_settings').select('contact_phone, contact_email').single()
     ]);
 
     // Error logging
@@ -49,6 +51,7 @@ export async function getHomepageData() {
     if (fotoboxError) console.error('❌ Fotobox error:', fotoboxError);
     if (blogError) console.error('❌ Blog error:', blogError);
     if (reviewsError) console.error('❌ Reviews error:', reviewsError);
+    if (settingsError) console.error('❌ Site settings error:', settingsError);
 
     console.log('📊 Data fetched:', {
       sections: Object.keys(sections).length,
@@ -58,6 +61,27 @@ export async function getHomepageData() {
       blog: blogPosts?.length || 0,
       reviews: reviews?.length || 0
     });
+
+    // Merge site settings into contact section
+    const contactSection = sections.contact || {};
+    if (siteSettings) {
+      // Initialize contactInfo if it doesn't exist
+      if (!contactSection.contactInfo) {
+        contactSection.contactInfo = {};
+      }
+      // Override phone from site_settings if not set or if it's a placeholder
+      if (siteSettings.contact_phone) {
+        const currentPhone = contactSection.contactInfo.phone || '';
+        // Replace if empty, placeholder, or contains XXX
+        if (!currentPhone || currentPhone.includes('XXX') || currentPhone === '+43 XXX XXX XXX') {
+          contactSection.contactInfo.phone = siteSettings.contact_phone;
+        }
+      }
+      // Override email from site_settings if not set
+      if (siteSettings.contact_email && !contactSection.contactInfo.email) {
+        contactSection.contactInfo.email = siteSettings.contact_email;
+      }
+    }
 
     return {
       // Section content from database
@@ -69,7 +93,7 @@ export async function getHomepageData() {
       testimonialsConfig: sections.testimonials || {},
       blogConfig: sections.blog || {},
       faq: sections.faq || {},
-      contact: sections.contact || {},
+      contact: contactSection,
       
       // Dynamic data from content tables
       portfolio: { 
