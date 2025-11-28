@@ -72,3 +72,5 @@ export default function FotoboxSectionEditor({ content, onChange }: Props) {
   );
 }
 
+
+

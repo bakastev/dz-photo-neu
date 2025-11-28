@@ -15,6 +15,7 @@ import TestimonialsSection from '@/components/homepage/TestimonialsSection';
 import BlogSection from '@/components/homepage/BlogSection';
 import FAQSection from '@/components/homepage/FAQSection';
 import ContactSection from '@/components/homepage/ContactSection';
+import ExternalContactForm from '@/components/shared/ExternalContactForm';
 
 export const metadata: Metadata = {
   title: 'Daniel Zangerle - Hochzeitsfotograf Oberösterreich',
@@ -75,6 +76,9 @@ export default async function HomePage() {
           <BlogSection data={data.blog} />
           <FAQSection data={data.faq} />
           <ContactSection data={data.contact} />
+          
+          {/* External Contact Form from kreativ.management */}
+          <ExternalContactForm />
         </main>
         
         <Footer />

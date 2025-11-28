@@ -136,3 +136,5 @@ Die **Content-Kategorisierung ist jetzt vollständig korrekt**:
 
 **Das Backend ist jetzt bereit für die Frontend-Entwicklung!** 🚀
 
+
+

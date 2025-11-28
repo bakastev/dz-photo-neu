@@ -13,3 +13,5 @@ export default function SchemaOrg({ data }: SchemaOrgProps) {
   );
 }
 
+
+
