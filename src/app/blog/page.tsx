@@ -2,7 +2,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { BookOpen, Calendar, ArrowRight, Tag, User } from 'lucide-react';
-import { supabase, type BlogPost } from '@/lib/supabase';
+import { createServerSupabaseClient } from '@/lib/auth-server';
+import type { BlogPost } from '@/lib/supabase';
 import { getImageUrl, defaultBlurDataURL, formatDate } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
 };
 
 async function getBlogPosts(): Promise<BlogPost[]> {
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')

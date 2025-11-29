@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createApiSupabaseClient } from '@/lib/auth-server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
     const session_id = Buffer.from(`${ip}-${user_agent}`).toString('base64').substring(0, 32);
 
     // Store tracking event directly in database for now
+    const { client: supabase } = createApiSupabaseClient(request);
     const { data, error } = await supabase
       .from('tracking_events')
       .insert({

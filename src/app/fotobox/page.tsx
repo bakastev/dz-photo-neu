@@ -2,7 +2,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Camera, Check, Star, ArrowRight, Sparkles, Users, Clock, Gift } from 'lucide-react';
-import { supabase, type FotoboxService } from '@/lib/supabase';
+import { createServerSupabaseClient } from '@/lib/auth-server';
+import type { FotoboxService } from '@/lib/supabase';
 import { getImageUrl, defaultBlurDataURL, formatPrice } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
 };
 
 async function getFotoboxPackages(): Promise<FotoboxService[]> {
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from('fotobox_services')
     .select('*')

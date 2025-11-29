@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, Calendar, MapPin, ArrowLeft, Camera } from 'lucide-react';
-import { supabase, type Wedding } from '@/lib/supabase';
+import { createStaticSupabaseClient } from '@/lib/auth-server';
+import type { Wedding } from '@/lib/supabase';
 import { getImageUrl, defaultBlurDataURL, formatDate } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -17,6 +18,7 @@ interface PageProps {
 }
 
 async function getWedding(slug: string): Promise<Wedding | null> {
+  const supabase = createStaticSupabaseClient();
   const { data, error } = await supabase
     .from('weddings')
     .select('*')
@@ -32,6 +34,7 @@ async function getWedding(slug: string): Promise<Wedding | null> {
 }
 
 async function getRelatedWeddings(currentId: string): Promise<Wedding[]> {
+  const supabase = createStaticSupabaseClient();
   const { data, error } = await supabase
     .from('weddings')
     .select('*')
@@ -72,6 +75,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
+  const supabase = createStaticSupabaseClient();
   const { data } = await supabase
     .from('weddings')
     .select('slug')

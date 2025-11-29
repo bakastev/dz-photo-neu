@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, ArrowLeft, Camera, Navigation, ExternalLink } from 'lucide-react';
-import { supabase, type Location } from '@/lib/supabase';
+import { createStaticSupabaseClient } from '@/lib/auth-server';
+import type { Location } from '@/lib/supabase';
 import { getImageUrl, defaultBlurDataURL } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -18,6 +19,7 @@ interface PageProps {
 }
 
 async function getLocation(slug: string): Promise<Location | null> {
+  const supabase = createStaticSupabaseClient();
   const { data, error } = await supabase
     .from('locations')
     .select('*')
@@ -33,6 +35,7 @@ async function getLocation(slug: string): Promise<Location | null> {
 }
 
 async function getRelatedLocations(currentId: string, city?: string): Promise<Location[]> {
+  const supabase = createStaticSupabaseClient();
   let query = supabase
     .from('locations')
     .select('*')
@@ -79,6 +82,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
+  const supabase = createStaticSupabaseClient();
   const { data } = await supabase
     .from('locations')
     .select('slug')

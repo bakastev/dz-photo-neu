@@ -1,8 +1,9 @@
-import { supabase } from './supabase';
+import { createServerSupabaseClient } from './auth-server';
 import type { Wedding, Location, BlogPost, FotoboxService, Review, Page } from './supabase';
 
 // Helper to get section content from homepage_sections table
 async function getHomepageSections() {
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from('homepage_sections')
     .select('section_key, content, enabled')
@@ -25,6 +26,7 @@ async function getHomepageSections() {
 export async function getHomepageData() {
   try {
     console.log('🔍 Fetching homepage data from Supabase...');
+    const supabase = await createServerSupabaseClient();
     
     // Fetch all data in parallel
     const [
@@ -113,6 +115,7 @@ export async function getHomepageData() {
 // Schema.org Data Fetching
 export async function getSchemaData(type: string, id?: string) {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data } = await supabase
       .from('structured_data')
       .select('schema_data')
@@ -130,6 +133,7 @@ export async function getSchemaData(type: string, id?: string) {
 // Generate Homepage Schema.org
 export async function generateHomepageSchema() {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data: business } = await supabase
       .from('structured_data')
       .select('schema_data')
@@ -198,6 +202,7 @@ export async function generateHomepageSchema() {
 // Wedding Data Fetching
 export async function getWeddingBySlug(slug: string): Promise<Wedding | null> {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('weddings')
       .select('*')
@@ -215,6 +220,7 @@ export async function getWeddingBySlug(slug: string): Promise<Wedding | null> {
 
 export async function getAllWeddings(): Promise<Wedding[]> {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('weddings')
       .select('*')
@@ -232,6 +238,7 @@ export async function getAllWeddings(): Promise<Wedding[]> {
 // Location Data Fetching
 export async function getLocationBySlug(slug: string): Promise<Location | null> {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('locations')
       .select('*')
@@ -249,6 +256,7 @@ export async function getLocationBySlug(slug: string): Promise<Location | null> 
 
 export async function getAllLocations(): Promise<Location[]> {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('locations')
       .select('*')
@@ -266,6 +274,7 @@ export async function getAllLocations(): Promise<Location[]> {
 // Blog Data Fetching
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('blog_posts')
       .select('*')
@@ -283,6 +292,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('blog_posts')
       .select('*')
@@ -300,6 +310,7 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
 // Fotobox Data Fetching
 export async function getFotoboxServiceBySlug(slug: string): Promise<FotoboxService | null> {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('fotobox_services')
       .select('*')
@@ -317,6 +328,7 @@ export async function getFotoboxServiceBySlug(slug: string): Promise<FotoboxServ
 
 export async function getAllFotoboxServices(): Promise<FotoboxService[]> {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('fotobox_services')
       .select('*')

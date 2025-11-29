@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { supabase } from '@/lib/supabase';
+import { createServerSupabaseClient } from '@/lib/auth-server';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 
 async function getDatenschutzPage() {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('pages')
       .select('*')

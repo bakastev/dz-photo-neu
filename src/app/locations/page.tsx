@@ -2,7 +2,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, ArrowRight, Camera, Star } from 'lucide-react';
-import { supabase, type Location } from '@/lib/supabase';
+import { createServerSupabaseClient } from '@/lib/auth-server';
+import type { Location } from '@/lib/supabase';
 import { getImageUrl, defaultBlurDataURL } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
 };
 
 async function getLocations(): Promise<Location[]> {
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from('locations')
     .select('*')

@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, ArrowLeft, Tag, User, Clock, ArrowRight } from 'lucide-react';
-import { supabase, type BlogPost } from '@/lib/supabase';
+import { createStaticSupabaseClient } from '@/lib/auth-server';
+import type { BlogPost } from '@/lib/supabase';
 import { getImageUrl, defaultBlurDataURL, formatDate } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -16,6 +17,7 @@ interface PageProps {
 }
 
 async function getBlogPost(slug: string): Promise<BlogPost | null> {
+  const supabase = createStaticSupabaseClient();
   const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
@@ -31,6 +33,7 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
 }
 
 async function getRelatedPosts(currentId: string, category?: string): Promise<BlogPost[]> {
+  const supabase = createStaticSupabaseClient();
   let query = supabase
     .from('blog_posts')
     .select('*')
@@ -80,6 +83,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
+  const supabase = createStaticSupabaseClient();
   const { data } = await supabase
     .from('blog_posts')
     .select('slug')

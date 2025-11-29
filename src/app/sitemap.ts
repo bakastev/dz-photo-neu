@@ -1,8 +1,9 @@
 import { MetadataRoute } from 'next';
-import { supabase } from '@/lib/supabase';
+import { createStaticSupabaseClient } from '@/lib/auth-server';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.dz-photo.at';
+  const supabase = createStaticSupabaseClient();
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

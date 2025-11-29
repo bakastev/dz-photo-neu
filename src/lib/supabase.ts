@@ -23,12 +23,15 @@ function getSupabaseClient(): SupabaseClient {
     // Connection test (only once, in browser)
     if (!connectionTestDone) {
       connectionTestDone = true;
-      supabaseInstance.from('weddings').select('id, slug, title', { count: 'exact' })
-        .then(({ data, count, error }) => {
-          if (error) {
-            console.error('❌ Supabase connection test FAILED:', error);
+      // Run connection test asynchronously, don't await
+      Promise.resolve(
+        supabaseInstance.from('weddings').select('id, slug, title', { count: 'exact' })
+      )
+        .then((result) => {
+          if (result.error) {
+            console.error('❌ Supabase connection test FAILED:', result.error);
           } else {
-            console.log('✅ Supabase connection OK!', { weddings: count, data: data?.slice(0, 2) });
+            console.log('✅ Supabase connection OK!', { weddings: result.count, data: result.data?.slice(0, 2) });
           }
         })
         .catch(() => {

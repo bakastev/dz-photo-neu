@@ -2,7 +2,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, Calendar, MapPin, ArrowRight, Camera } from 'lucide-react';
-import { supabase, type Wedding } from '@/lib/supabase';
+import { createServerSupabaseClient } from '@/lib/auth-server';
+import type { Wedding } from '@/lib/supabase';
 import { getImageUrl, defaultBlurDataURL, formatDate } from '@/lib/utils';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
 };
 
 async function getWeddings(): Promise<Wedding[]> {
+  const supabase = await createServerSupabaseClient();
   const { data, error } = await supabase
     .from('weddings')
     .select('*')

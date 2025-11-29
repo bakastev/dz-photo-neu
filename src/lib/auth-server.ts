@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
+import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import type { CookieOptions } from '@supabase/ssr';
 import type { AdminUser } from './auth';
@@ -26,6 +27,17 @@ export async function createServerSupabaseClient() {
           // Server Component - ignore
         }
       },
+    },
+  });
+}
+
+// Static Generation Client (für generateStaticParams - keine Cookies)
+export function createStaticSupabaseClient() {
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
     },
   });
 }
