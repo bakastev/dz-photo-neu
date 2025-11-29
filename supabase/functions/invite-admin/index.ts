@@ -220,28 +220,68 @@ Deno.serve(async (req) => {
     })
 
     if (!resendResponse.ok) {
-      const errorData = await resendResponse.json().catch(() => ({}))
-      console.error('❌ [Invite Admin Function] Resend error:', errorData)
+      let errorData: any = {};
+      try {
+        const errorText = await resendResponse.text();
+        try {
+          errorData = JSON.parse(errorText);
+        } catch {
+          errorData = { message: errorText || 'Unknown Resend error' };
+        }
+      } catch (e) {
+        errorData = { message: 'Failed to read Resend error response' };
+      }
+      console.error('❌ [Invite Admin Function] Resend error:', {
+        status: resendResponse.status,
+        statusText: resendResponse.statusText,
+        error: errorData,
+      });
       return new Response(
-        JSON.stringify({ error: 'Failed to send email', details: errorData.message || 'Unknown Resend error' }),
-        { status: 500, headers: { 'Content-Type': 'application/json' } }
+        JSON.stringify({ 
+          error: 'Failed to send email', 
+          details: errorData.message || 'Unknown Resend error',
+          resend_status: resendResponse.status,
+        }),
+        { 
+          status: 500, 
+          headers: { 
+            'Content-Type': 'application/json; charset=utf-8',
+          } 
+        }
       )
     }
 
-    const resendData = await resendResponse.json()
+    let resendData: any = {};
+    try {
+      resendData = await resendResponse.json();
+    } catch (jsonError) {
+      console.warn('⚠️ [Invite Admin Function] Could not parse Resend response as JSON, but email was sent');
+      // Email was sent (status 200), so continue with success
+    }
+    
     console.log('✅ [Invite Admin Function] Email sent successfully:', {
       email: email,
       resend_id: resendData.id,
+      resend_status: resendResponse.status,
     })
 
+    // Always return valid JSON with proper headers
+    const successResponse = {
+      success: true,
+      message: 'Invitation sent successfully',
+      user: { id: userId, email },
+      note: 'Die Einladung wurde versendet. Bitte prüfen Sie auch Ihren Spam-Ordner.',
+    };
+
     return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'Invitation sent successfully',
-        user: { id: userId, email },
-        note: 'Die Einladung wurde versendet. Bitte prüfen Sie auch Ihren Spam-Ordner.',
-      }),
-      { status: 200, headers: { 'Content-Type': 'application/json' } }
+      JSON.stringify(successResponse),
+      { 
+        status: 200, 
+        headers: { 
+          'Content-Type': 'application/json; charset=utf-8',
+          'Content-Length': JSON.stringify(successResponse).length.toString(),
+        } 
+      }
     )
   } catch (error: any) {
     console.error('❌ [Invite Admin Function] Error:', error)

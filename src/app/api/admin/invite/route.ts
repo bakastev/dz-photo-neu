@@ -91,14 +91,40 @@ export async function POST(request: NextRequest) {
 
     // Call Edge Function
     console.log('📞 [Invite API] About to call Edge Function...');
-    const edgeFunctionResponse = await fetch(`${supabaseUrl}/functions/v1/invite-admin`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${supabaseServiceKey}`,
-      },
-      body: JSON.stringify({ email, role, redirectTo }),
-    });
+    let edgeFunctionResponse: Response;
+    try {
+      edgeFunctionResponse = await fetch(`${supabaseUrl}/functions/v1/invite-admin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${supabaseServiceKey}`,
+        },
+        body: JSON.stringify({ email, role, redirectTo }),
+        // Add timeout to prevent hanging
+        signal: AbortSignal.timeout(30000), // 30 seconds timeout
+      });
+    } catch (fetchError: any) {
+      console.error('❌ [Invite API] Fetch error:', fetchError);
+      // If it's a timeout or network error, but the email might have been sent
+      // Check if it's a timeout
+      if (fetchError.name === 'AbortError' || fetchError.name === 'TimeoutError') {
+        return NextResponse.json(
+          { 
+            error: 'Request timeout',
+            details: 'The request took too long. The invitation may have been sent. Please check the email inbox.',
+            note: 'Bitte prüfen Sie auch Ihren Spam-Ordner. Die Einladung wurde möglicherweise bereits versendet.'
+          },
+          { status: 504, headers: response.headers }
+        );
+      }
+      return NextResponse.json(
+        { 
+          error: 'Failed to reach Edge Function',
+          details: fetchError.message || 'Network error'
+        },
+        { status: 500, headers: response.headers }
+      );
+    }
 
     console.log('📥 [Invite API] Edge Function response:', {
       status: edgeFunctionResponse.status,
@@ -108,13 +134,27 @@ export async function POST(request: NextRequest) {
     });
 
     let edgeFunctionData: any = {};
+    let responseText = '';
+    
     try {
-      const responseText = await edgeFunctionResponse.text();
+      responseText = await edgeFunctionResponse.text();
       console.log('📥 [Invite API] Edge Function response text length:', responseText.length);
       console.log('📥 [Invite API] Edge Function response text preview:', responseText.substring(0, 500));
       
       if (!responseText || responseText.trim() === '') {
-        console.error('❌ [Invite API] Empty response from Edge Function');
+        console.warn('⚠️ [Invite API] Empty response from Edge Function, but status is:', edgeFunctionResponse.status);
+        // If status is 200, assume success even with empty response
+        if (edgeFunctionResponse.ok) {
+          console.log('✅ [Invite API] Assuming success despite empty response (status 200)');
+          return NextResponse.json({
+            success: true,
+            message: 'Invitation sent successfully',
+            note: 'Die Einladung wurde versendet. Bitte prüfen Sie auch Ihren Spam-Ordner.',
+          }, {
+            status: 200,
+            headers: response.headers,
+          });
+        }
         return NextResponse.json(
           { 
             error: 'Empty response from Edge Function',
@@ -129,6 +169,18 @@ export async function POST(request: NextRequest) {
       } catch (jsonError: any) {
         console.error('❌ [Invite API] JSON parse error:', jsonError);
         console.error('❌ [Invite API] Response text that failed to parse:', responseText);
+        // If status is 200, assume success even if JSON parsing fails
+        if (edgeFunctionResponse.ok) {
+          console.log('✅ [Invite API] Assuming success despite JSON parse error (status 200)');
+          return NextResponse.json({
+            success: true,
+            message: 'Invitation sent successfully',
+            note: 'Die Einladung wurde versendet. Bitte prüfen Sie auch Ihren Spam-Ordner.',
+          }, {
+            status: 200,
+            headers: response.headers,
+          });
+        }
         return NextResponse.json(
           { 
             error: 'Failed to parse Edge Function response',
@@ -139,6 +191,18 @@ export async function POST(request: NextRequest) {
       }
     } catch (parseError: any) {
       console.error('❌ [Invite API] Failed to read Edge Function response:', parseError);
+      // If status is 200, assume success
+      if (edgeFunctionResponse.ok) {
+        console.log('✅ [Invite API] Assuming success despite read error (status 200)');
+        return NextResponse.json({
+          success: true,
+          message: 'Invitation sent successfully',
+          note: 'Die Einladung wurde versendet. Bitte prüfen Sie auch Ihren Spam-Ordner.',
+        }, {
+          status: 200,
+          headers: response.headers,
+        });
+      }
       return NextResponse.json(
         { 
           error: 'Failed to read Edge Function response',
