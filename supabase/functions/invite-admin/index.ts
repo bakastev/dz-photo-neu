@@ -176,31 +176,96 @@ Deno.serve(async (req) => {
     // Direct link to login page (no tokens needed)
     const loginUrl = redirectTo || 'https://dz-photo-neu.vercel.app/admin-login'
 
-    // Send email via Resend with password
+    // Send email via Resend with password - Design System Style
     const emailHtml = `
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Einladung zum Admin-Bereich</title>
+  <title>Einladung zum Admin-Bereich - DZ Photo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-  <div style="background-color: #ffffff; border-radius: 8px; padding: 40px; border: 1px solid #e0e0e0;">
-    <h1 style="color: #333; margin-top: 0;">Einladung zum DZ Photo Admin-Bereich</h1>
-    <p>Du wurdest eingeladen, dem Admin-Bereich von DZ Photo beizutreten.</p>
-    <p>Hier sind deine Zugangsdaten:</p>
-    <div style="background-color: #f4f4f4; padding: 20px; border-radius: 6px; margin: 20px 0;">
-      <p style="margin: 10px 0;"><strong>E-Mail:</strong> ${email}</p>
-      <p style="margin: 10px 0;"><strong>Passwort:</strong> <code style="background-color: #ffffff; padding: 4px 8px; border-radius: 4px; font-size: 16px; letter-spacing: 1px;">${generatedPassword}</code></p>
-    </div>
-    <p style="margin: 30px 0;">
-      <a href="${loginUrl}" style="display: inline-block; background-color: #0070f3; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600;">Zur Login-Seite</a>
-    </p>
-    <p style="color: #999; font-size: 12px; margin-top: 40px; border-top: 1px solid #e0e0e0; padding-top: 20px;">
-      Bitte ändere dein Passwort nach dem ersten Login. Falls du diese Einladung nicht angefordert hast, kannst du diese E-Mail ignorieren.
-    </p>
-  </div>
+<body style="margin: 0; padding: 0; background-color: #0A0A0A; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #0A0A0A; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width: 600px; background: linear-gradient(135deg, rgba(18, 18, 18, 0.95) 0%, rgba(30, 30, 30, 0.9) 100%); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.1); border: 1px solid rgba(208, 184, 136, 0.2);">
+          <!-- Header with Gold Accent -->
+          <tr>
+            <td style="background: linear-gradient(135deg, rgba(208, 184, 136, 0.15) 0%, rgba(240, 235, 210, 0.1) 100%); padding: 40px 40px 30px; text-align: center; border-bottom: 1px solid rgba(208, 184, 136, 0.2);">
+              <h1 style="margin: 0; font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: #FFFFFF; line-height: 1.2;">
+                Einladung zum <span style="background: linear-gradient(to right, #D0B888, #F0EBD2, #D0B888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Admin-Bereich</span>
+              </h1>
+              <p style="margin: 12px 0 0; font-size: 16px; color: rgba(255, 255, 255, 0.7); font-weight: 400;">
+                DZ Photo - Hochzeitsfotografie
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Main Content -->
+          <tr>
+            <td style="padding: 40px;">
+              <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+                Hallo,
+              </p>
+              <p style="margin: 0 0 32px; font-size: 16px; line-height: 1.6; color: rgba(255, 255, 255, 0.9);">
+                du wurdest eingeladen, dem Admin-Bereich von <strong style="color: #D0B888;">DZ Photo</strong> beizutreten. 
+                Hier kannst du Inhalte verwalten, neue Hochzeiten hinzufügen und deine Website selbstständig pflegen.
+              </p>
+              
+              <!-- Credentials Box -->
+              <div style="background: linear-gradient(135deg, rgba(208, 184, 136, 0.1) 0%, rgba(240, 235, 210, 0.05) 100%); border: 1px solid rgba(208, 184, 136, 0.3); border-radius: 12px; padding: 24px; margin: 32px 0;">
+                <p style="margin: 0 0 16px; font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: #D0B888; text-align: center;">
+                  Deine Zugangsdaten
+                </p>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tr>
+                    <td style="padding: 12px 0; border-bottom: 1px solid rgba(208, 184, 136, 0.2);">
+                      <p style="margin: 0; font-size: 14px; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;">E-Mail</p>
+                      <p style="margin: 4px 0 0; font-size: 16px; color: #FFFFFF; font-weight: 500;">${email}</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 12px 0 0;">
+                      <p style="margin: 0; font-size: 14px; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;">Passwort</p>
+                      <p style="margin: 4px 0 0; font-size: 18px; font-family: 'Courier New', monospace; color: #D0B888; font-weight: 600; letter-spacing: 2px; background-color: rgba(0, 0, 0, 0.3); padding: 8px 12px; border-radius: 6px; display: inline-block;">${generatedPassword}</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <!-- CTA Button -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tr>
+                  <td align="center" style="padding: 32px 0 24px;">
+                    <a href="${loginUrl}" style="display: inline-block; background: linear-gradient(135deg, #D0B888 0%, #B8960F 100%); color: #0A0A0A; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 16px rgba(208, 184, 136, 0.3); transition: all 0.3s ease;">
+                      Zur Login-Seite
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Info Text -->
+              <p style="margin: 24px 0 0; font-size: 14px; line-height: 1.6; color: rgba(255, 255, 255, 0.6); text-align: center;">
+                <strong style="color: rgba(255, 255, 255, 0.8);">Wichtig:</strong> Bitte ändere dein Passwort nach dem ersten Login für mehr Sicherheit.
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 24px 40px; background-color: rgba(0, 0, 0, 0.3); border-top: 1px solid rgba(208, 184, 136, 0.1); text-align: center;">
+              <p style="margin: 0; font-size: 12px; color: rgba(255, 255, 255, 0.5); line-height: 1.5;">
+                Falls du diese Einladung nicht angefordert hast, kannst du diese E-Mail ignorieren.<br>
+                <span style="color: rgba(208, 184, 136, 0.7);">DZ Photo</span> · Hochzeitsfotografie in Oberösterreich
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
     `
