@@ -19,6 +19,8 @@ import {
   CreditCard,
   Calendar,
   Sparkles,
+  Banknote,
+  Copy,
   Gauge,
   Server,
   FileText,
@@ -62,13 +64,23 @@ import {
   Upload,
   Download,
   Trash2,
-  Copy,
   Share2
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function OnboardingPresentation() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  const handleCopy = async (text: string, field: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-dark-background text-white">
@@ -804,28 +816,139 @@ export default function OnboardingPresentation() {
                 </div>
               </div>
               
-              <div className="space-y-4">
-                <a 
-                  href="https://payment-links.mollie.com/payment/yoj63UgbfZebPmdX7uH5b"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <Button 
-                    variant="gold" 
-                    size="xl"
-                    className="w-full sm:w-auto text-lg py-6 px-8 group"
-                  >
-                    <CreditCard className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" />
-                    Jetzt Zahlung abschließen
-                    <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </a>
-                
-                <p className="text-sm text-gray-400 mt-4">
-                  Sichere Zahlung über Mollie. Nach erfolgreicher Zahlung erhältst du 
-                  eine Bestätigung und wir vereinbaren den Setup-Call.
-                </p>
+              <div className="space-y-6">
+                {/* Payment Options */}
+                <div>
+                  <h3 className="text-xl font-serif font-semibold text-white mb-4">
+                    Zahlungsoptionen
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    {/* Mollie Payment Link */}
+                    <a 
+                      href="https://payment-links.mollie.com/payment/yoj63UgbfZebPmdX7uH5b"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <Button 
+                        variant="gold" 
+                        size="lg"
+                        className="w-full text-base py-5 px-6 group"
+                      >
+                        <CreditCard className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                        Zahlung via Mollie
+                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </a>
+                    
+                    {/* Qonto Payment Link */}
+                    <a 
+                      href="https://pay.qonto.com/payment-links/019aceea-9d84-7841-bc26-ca16ac2ac3df?resource_id=019aceea-9d7b-7ddd-b952-09a32d961e25"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      <Button 
+                        variant="gold" 
+                        size="lg"
+                        className="w-full text-base py-5 px-6 group"
+                      >
+                        <CreditCard className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                        Zahlung via Qonto
+                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </a>
+                  </div>
+                  
+                  <p className="text-sm text-gray-400 text-center">
+                    Sichere Zahlung über Mollie oder Qonto. Nach erfolgreicher Zahlung erhältst du 
+                    eine Bestätigung und wir vereinbaren den Setup-Call.
+                  </p>
+                </div>
+
+                {/* Manual Bank Transfer */}
+                <div className="mt-8 pt-8 border-t border-white/10">
+                  <h3 className="text-xl font-serif font-semibold text-white mb-4 flex items-center">
+                    <Banknote className="w-6 h-6 text-gold mr-2" />
+                    Oder per Überweisung
+                  </h3>
+                  
+                  <div className="glass-card rounded-xl p-6 text-left">
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-sm text-gray-400 mb-1 uppercase tracking-wide">Zahlung an</p>
+                        <p className="text-white font-medium">Steve Baka-Growing Brands</p>
+                        <p className="text-gray-300 text-sm">Maximilian-von-Welsch-Str. 4</p>
+                        <p className="text-gray-300 text-sm">76646 Bruchsal, DE</p>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-white/10">
+                        <div>
+                          <p className="text-sm text-gray-400 mb-1 uppercase tracking-wide">IBAN</p>
+                          <div className="flex items-center space-x-2">
+                            <p className="text-white font-mono text-base">DE81 1001 0123 6148 3415 64</p>
+                            <button
+                              onClick={() => handleCopy('DE81100101236148341564', 'iban')}
+                              className="text-gold hover:text-gold-light transition-colors"
+                              title="Kopieren"
+                            >
+                              {copiedField === 'iban' ? (
+                                <CheckCircle2 className="w-4 h-4 text-gold" />
+                              ) : (
+                                <Copy className="w-4 h-4" />
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <p className="text-sm text-gray-400 mb-1 uppercase tracking-wide">BIC</p>
+                          <div className="flex items-center space-x-2">
+                            <p className="text-white font-mono text-base">QNTODEB2XXX</p>
+                            <button
+                              onClick={() => handleCopy('QNTODEB2XXX', 'bic')}
+                              className="text-gold hover:text-gold-light transition-colors"
+                              title="Kopieren"
+                            >
+                              {copiedField === 'bic' ? (
+                                <CheckCircle2 className="w-4 h-4 text-gold" />
+                              ) : (
+                                <Copy className="w-4 h-4" />
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-4 border-t border-white/10">
+                        <p className="text-sm text-gray-400 mb-1 uppercase tracking-wide">Überweisungsbetrag</p>
+                        <p className="text-2xl font-serif font-bold text-gold">1.000,00 €</p>
+                      </div>
+                      
+                      <div className="pt-4 border-t border-white/10">
+                        <p className="text-sm text-gray-400 mb-1 uppercase tracking-wide">Verwendungszweck</p>
+                          <div className="flex items-center space-x-2">
+                            <p className="text-white font-medium">dz-photo.at Webseite Re-Design</p>
+                            <button
+                              onClick={() => handleCopy('dz-photo.at Webseite Re-Design', 'zweck')}
+                              className="text-gold hover:text-gold-light transition-colors"
+                              title="Kopieren"
+                            >
+                              {copiedField === 'zweck' ? (
+                                <CheckCircle2 className="w-4 h-4 text-gold" />
+                              ) : (
+                                <Copy className="w-4 h-4" />
+                              )}
+                            </button>
+                          </div>
+                        <p className="text-xs text-gray-500 mt-2">
+                          Bitte gib diesen Verwendungszweck bei der Überweisung an, damit wir deine Zahlung zuordnen können.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               
               <div className="mt-12 pt-8 border-t border-white/10">
