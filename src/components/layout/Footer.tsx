@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, Mail, Phone, MapPin, Instagram, Facebook } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { createServerSupabaseClient } from '@/lib/auth-server';
 
 const quickLinks = [
   { name: 'Über mich', href: '#about' },
@@ -26,6 +26,7 @@ const legal = [
 
 async function getSiteSettings() {
   try {
+    const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('site_settings')
       .select('contact_email, contact_phone')
