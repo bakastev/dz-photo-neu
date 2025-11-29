@@ -9,31 +9,46 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOi
 
 // Global singleton - initialized once per browser context
 // Use a global variable that persists across hot reloads
-let browserClient: SupabaseClient | null = null;
+// Store on window object to ensure true singleton across all modules
+declare global {
+  interface Window {
+    __supabaseBrowserClient?: SupabaseClient;
+  }
+}
 
 // Browser Client (für Client Components)
 // Uses a true singleton pattern to prevent multiple GoTrueClient instances
 // createBrowserClient from @supabase/ssr automatically handles cookies for SSR compatibility
 export function createBrowserSupabaseClient(): SupabaseClient {
   // Only create client if it doesn't exist and we're in browser
-  if (typeof window !== 'undefined' && !browserClient) {
-    // createBrowserClient automatically uses cookies for session storage
-    // This ensures API routes can read the session from cookies
-    browserClient = createBrowserClient(supabaseUrl, supabaseAnonKey);
+  if (typeof window !== 'undefined') {
+    // Use window object to ensure true singleton across all modules and hot reloads
+    if (!window.__supabaseBrowserClient) {
+      // createBrowserClient automatically uses cookies for session storage
+      // This ensures API routes can read the session from cookies
+      window.__supabaseBrowserClient = createBrowserClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          // Use a unique storage key to prevent conflicts
+          storageKey: 'sb-qljgbskxopjkivkcuypu-auth-token',
+          // Persist session in cookies for SSR compatibility
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+        },
+      });
+    }
+    return window.__supabaseBrowserClient;
   }
   
   // Fallback for SSR (shouldn't happen in client components, but just in case)
-  if (!browserClient) {
-    browserClient = createBrowserClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false,
-      },
-    });
-  }
-  
-  return browserClient;
+  // Create a temporary client that doesn't persist
+  return createBrowserClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  });
 }
 
 // Client-side auth helpers

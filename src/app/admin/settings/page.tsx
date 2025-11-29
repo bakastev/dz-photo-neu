@@ -181,22 +181,41 @@ export default function SettingsPage() {
 
       // Get response text first to handle empty responses
       const responseText = await response.text();
-      let data;
+      let data: any = {};
       
+      // Handle empty response - if status is OK, assume success
       if (!responseText || responseText.trim() === '') {
-        throw new Error('Empty response from server');
-      }
-      
-      try {
-        data = JSON.parse(responseText);
-      } catch (parseError) {
-        console.error('Failed to parse response:', responseText);
-        throw new Error(`Invalid response from server: ${responseText.substring(0, 200)}`);
+        if (response.ok || response.status === 200 || response.status === 201) {
+          // Empty response but status is OK - assume success
+          data = {
+            success: true,
+            message: 'Invitation sent successfully',
+            note: 'Die Einladung wurde versendet. Bitte prüfen Sie auch Ihren Spam-Ordner.',
+          };
+        } else {
+          throw new Error('Empty response from server');
+        }
+      } else {
+        try {
+          data = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error('Failed to parse response:', responseText);
+          // If status is OK, assume success despite parse error
+          if (response.ok || response.status === 200 || response.status === 201) {
+            data = {
+              success: true,
+              message: 'Invitation sent successfully',
+              note: 'Die Einladung wurde versendet. Bitte prüfen Sie auch Ihren Spam-Ordner.',
+            };
+          } else {
+            throw new Error(`Invalid response from server: ${responseText.substring(0, 200)}`);
+          }
+        }
       }
 
       if (!response.ok) {
         const errorMessage = data.details 
-          ? `${data.error}: ${data.details}` 
+          ? `${data.error || 'Fehler'}: ${data.details}` 
           : data.error || 'Einladung fehlgeschlagen';
         throw new Error(errorMessage);
       }
