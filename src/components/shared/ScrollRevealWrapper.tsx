@@ -8,7 +8,8 @@ interface ScrollRevealWrapperProps {
 }
 
 export default function ScrollRevealWrapper({ children }: ScrollRevealWrapperProps) {
-  useScrollReveal();
+  // Use hook without ref - will use document.querySelectorAll
+  useScrollReveal(undefined, []);
   
   return <>{children}</>;
 }

@@ -1,27 +1,56 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, RefObject } from 'react';
 
-export function useScrollReveal() {
+// Hook that accepts optional ref and dependencies for re-initialization
+export function useScrollReveal(ref?: RefObject<HTMLElement>, deps: any[] = []) {
   useEffect(() => {
-    const revealElements = document.querySelectorAll('.reveal');
+    // Only run in browser
+    if (typeof window === 'undefined') return;
 
-    const revealOnScroll = () => {
-      revealElements.forEach((element) => {
-        const elementTop = element.getBoundingClientRect().top;
-        const elementBottom = element.getBoundingClientRect().bottom;
-        const windowHeight = window.innerHeight;
-
-        // Element ist sichtbar wenn der obere Teil im Viewport ist
-        // oder wenn es bereits teilweise sichtbar ist
-        if (elementTop < windowHeight * 0.85 && elementBottom > 0) {
-          element.classList.add('active');
-        }
-      });
+    // Get elements from ref or document
+    const getRevealElements = () => {
+      if (ref?.current) {
+        return ref.current.querySelectorAll('.reveal');
+      }
+      return document.querySelectorAll('.reveal');
     };
 
-    // Initial check beim Laden
-    revealOnScroll();
+    const revealOnScroll = () => {
+      try {
+        const revealElements = getRevealElements();
+        
+        revealElements.forEach((element) => {
+          // Safety check: ensure element is a valid Node
+          if (!element || !(element instanceof Node)) {
+            return;
+          }
+
+          try {
+            const elementTop = element.getBoundingClientRect().top;
+            const elementBottom = element.getBoundingClientRect().bottom;
+            const windowHeight = window.innerHeight;
+
+            // Element ist sichtbar wenn der obere Teil im Viewport ist
+            // oder wenn es bereits teilweise sichtbar ist
+            if (elementTop < windowHeight * 0.85 && elementBottom > 0) {
+              element.classList.add('active');
+            }
+          } catch (error) {
+            // Silently ignore errors for individual elements
+            console.warn('Scroll reveal error for element:', error);
+          }
+        });
+      } catch (error) {
+        // Silently ignore errors
+        console.warn('Scroll reveal error:', error);
+      }
+    };
+
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      revealOnScroll();
+    }, 100);
 
     // Bei Scroll
     window.addEventListener('scroll', revealOnScroll, { passive: true });
@@ -30,10 +59,11 @@ export function useScrollReveal() {
     window.addEventListener('resize', revealOnScroll, { passive: true });
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener('scroll', revealOnScroll);
       window.removeEventListener('resize', revealOnScroll);
     };
-  }, []);
+  }, [ref, ...deps]);
 }
 
 

@@ -1,29 +1,45 @@
-import { createClient } from '@supabase/supabase-js';
+// IMPORTANT: This file now uses the singleton client to prevent multiple GoTrueClient instances
+// Use createBrowserSupabaseClient() from @/lib/auth-client for client-side
+// Use createServerSupabaseClient() from @/lib/auth-server for server-side
 
-// TEMPORARY: Use hardcoded values to ensure it works
-const supabaseUrl = 'https://qljgbskxopjkivkcuypu.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsamdic2t4b3Bqa2l2a2N1eXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQxMzU1OTcsImV4cCI6MjA3OTcxMTU5N30.2InM7AGTwNB8MvMy2RJGIekO3aGgLSB2utQPL1H7dYM';
+import { createBrowserSupabaseClient } from './auth-client';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  global: {
-    headers: {
-      'Accept': 'application/json',
-      'Prefer': 'return=representation',
-    },
-  },
-});
+// Get the singleton client instance
+// This ensures we use the same instance as all other parts of the app
+let supabaseInstance: ReturnType<typeof createBrowserSupabaseClient> | null = null;
 
-// Automatischer Connection-Test beim Client-Start
-if (typeof window !== 'undefined') {
-  supabase.from('weddings').select('id, slug, title', { count: 'exact' })
-    .then(({ data, count, error }) => {
-      if (error) {
-        console.error('❌ Supabase connection test FAILED:', error);
-      } else {
-        console.log('✅ Supabase connection OK!', { weddings: count, data: data?.slice(0, 2) });
-      }
-    });
+function getSupabaseClient() {
+  if (typeof window === 'undefined') {
+    // SSR - return a mock object to prevent errors
+    return {
+      from: () => ({
+        select: () => ({ then: () => Promise.resolve({ data: null, error: null, count: 0 }) }),
+      }),
+    } as any;
+  }
+
+  if (!supabaseInstance) {
+    supabaseInstance = createBrowserSupabaseClient();
+    
+    // Connection test (only once, in browser)
+    supabaseInstance.from('weddings').select('id, slug, title', { count: 'exact' })
+      .then(({ data, count, error }) => {
+        if (error) {
+          console.error('❌ Supabase connection test FAILED:', error);
+        } else {
+          console.log('✅ Supabase connection OK!', { weddings: count, data: data?.slice(0, 2) });
+        }
+      })
+      .catch(() => {
+        // Silently ignore connection test errors
+      });
+  }
+  
+  return supabaseInstance;
 }
+
+// Export singleton instance
+export const supabase = getSupabaseClient();
 
 // Types für TypeScript
 export interface Wedding {
