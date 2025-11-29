@@ -3,43 +3,50 @@
 // Use createServerSupabaseClient() from @/lib/auth-server for server-side
 
 import { createBrowserSupabaseClient } from './auth-client';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 // Get the singleton client instance
 // This ensures we use the same instance as all other parts of the app
-let supabaseInstance: ReturnType<typeof createBrowserSupabaseClient> | null = null;
+let supabaseInstance: SupabaseClient | null = null;
+let connectionTestDone = false;
 
-function getSupabaseClient() {
+function getSupabaseClient(): SupabaseClient {
   if (typeof window === 'undefined') {
-    // SSR - return a mock object to prevent errors
-    return {
-      from: () => ({
-        select: () => ({ then: () => Promise.resolve({ data: null, error: null, count: 0 }) }),
-      }),
-    } as any;
+    // SSR - create a minimal client that won't cause errors
+    // Server components should use createServerSupabaseClient instead
+    throw new Error('supabase client should not be used in SSR. Use createServerSupabaseClient() instead.');
   }
 
   if (!supabaseInstance) {
     supabaseInstance = createBrowserSupabaseClient();
     
     // Connection test (only once, in browser)
-    supabaseInstance.from('weddings').select('id, slug, title', { count: 'exact' })
-      .then(({ data, count, error }) => {
-        if (error) {
-          console.error('❌ Supabase connection test FAILED:', error);
-        } else {
-          console.log('✅ Supabase connection OK!', { weddings: count, data: data?.slice(0, 2) });
-        }
-      })
-      .catch(() => {
-        // Silently ignore connection test errors
-      });
+    if (!connectionTestDone) {
+      connectionTestDone = true;
+      supabaseInstance.from('weddings').select('id, slug, title', { count: 'exact' })
+        .then(({ data, count, error }) => {
+          if (error) {
+            console.error('❌ Supabase connection test FAILED:', error);
+          } else {
+            console.log('✅ Supabase connection OK!', { weddings: count, data: data?.slice(0, 2) });
+          }
+        })
+        .catch(() => {
+          // Silently ignore connection test errors
+        });
+    }
   }
   
   return supabaseInstance;
 }
 
-// Export singleton instance
-export const supabase = getSupabaseClient();
+// Export singleton instance using a Proxy for lazy initialization
+// This ensures the client is only created when actually accessed
+export const supabase = new Proxy({} as SupabaseClient, {
+  get(_target, prop) {
+    return (getSupabaseClient() as any)[prop];
+  },
+});
 
 // Types für TypeScript
 export interface Wedding {
