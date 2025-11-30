@@ -62,13 +62,26 @@
     {
       "source": "/robots.txt",
       "destination": "/robots.txt"
+    },
+    {
+      "source": "/",
+      "destination": "/lp/hochzeit",
+      "has": [
+        {
+          "type": "host",
+          "value": "lp.dz-photo.at"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/lp-hochzeit",
+      "destination": "/lp/hochzeit",
+      "permanent": false
     }
   ],
   "env": {
     "NEXT_PUBLIC_SITE_URL": "https://www.dz-photo.at"
   }
 }
-
-
-
-
