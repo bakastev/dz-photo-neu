@@ -1,7 +1,6 @@
 'use client';
 
-import Script from 'next/script';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface KreativManagementFormProps {
   formId?: string;
@@ -14,60 +13,78 @@ export default function KreativManagementForm({
   theme = 'default',
   className = '',
 }: KreativManagementFormProps) {
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-  const [scriptError, setScriptError] = useState(false);
+  const formElementRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Check if script is already loaded
-    if (typeof window !== 'undefined' && (window as any).kreativManagementFormLoaded) {
-      setScriptLoaded(true);
-    }
+    // Mark as mounted to ensure element is in DOM
+    setIsMounted(true);
   }, []);
 
-  return (
-    <>
-      {/* Form Container */}
-      <div className={className}>
-        <div 
-          className="js-hm-form" 
-          id="kreativmanagement" 
-          data-theme={theme} 
-          data-form-id={formId}
-        />
-      </div>
+  useEffect(() => {
+    // Only run in browser and after mount
+    if (typeof window === 'undefined' || !isMounted || !formElementRef.current) return;
 
-      {/* External Script - loads after page is interactive */}
-      <Script
-        src="https://api.kreativ.management/Form/GetContactFormWidget"
-        strategy="lazyOnload"
-        onLoad={() => {
-          console.log('kreativ.management form script loaded');
-          setScriptLoaded(true);
-          if (typeof window !== 'undefined') {
-            (window as any).kreativManagementFormLoaded = true;
+    // Check if script is already loaded
+    const existingScript = document.querySelector('script[src*="kreativ.management"]');
+    if (existingScript) {
+      console.log('kreativ.management script already loaded');
+      // If script is already loaded, it should have already initialized forms
+      // But we can try to trigger re-initialization
+      setTimeout(() => {
+        // Dispatch a custom event to trigger form initialization
+        window.dispatchEvent(new Event('DOMContentLoaded'));
+      }, 100);
+      return;
+    }
+
+    // Wait a bit to ensure DOM is ready
+    const timer = setTimeout(() => {
+      // Load script dynamically
+      const script = document.createElement('script');
+      script.src = 'https://api.kreativ.management/Form/GetContactFormWidget';
+      script.async = true;
+      script.defer = true;
+      
+      script.onload = () => {
+        console.log('kreativ.management form script loaded');
+        // Script should automatically find and initialize .js-hm-form elements
+        // Give it a moment to process
+        setTimeout(() => {
+          const formElement = formElementRef.current;
+          if (formElement && !formElement.querySelector('form, iframe')) {
+            console.warn('Form element found but not initialized. Checking for manual init...');
+            // Try to trigger initialization manually if needed
+            if ((window as any).kreativManagementFormWidget) {
+              console.log('Found kreativManagementFormWidget, attempting manual init');
+            }
           }
-        }}
-        onError={(e) => {
-          console.error('Error loading kreativ.management form script:', e);
-          setScriptError(true);
-        }}
-      />
+        }, 500);
+      };
 
-      {/* Error State */}
-      {scriptError && (
-        <div className="text-center py-8">
-          <p className="text-red-400 mb-4">
-            Das Formular konnte nicht geladen werden. Bitte laden Sie die Seite neu.
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-gold hover:bg-gold-light text-dark-background px-6 py-3 rounded-full font-medium transition-colors"
-          >
-            Seite neu laden
-          </button>
-        </div>
-      )}
-    </>
+      script.onerror = (error) => {
+        console.error('Error loading kreativ.management form script:', error);
+      };
+
+      // Append script to document head
+      document.head.appendChild(script);
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isMounted]);
+
+  return (
+    <div className={className}>
+      <div 
+        ref={formElementRef}
+        className="js-hm-form" 
+        id="kreativmanagement" 
+        data-theme={theme} 
+        data-form-id={formId}
+      />
+    </div>
   );
 }
 
