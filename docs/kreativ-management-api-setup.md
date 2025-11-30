@@ -2,7 +2,7 @@
 
 ## Übersicht
 
-Die Landing Page `/lp/hochzeit` verwendet ein eigenes Kontaktformular, das die Daten direkt an die kreativ.management API sendet.
+Sowohl die Landing Page `/lp/hochzeit` als auch das Kontaktformular auf der Startseite senden die Daten an die kreativ.management API. Die Startseite sendet zusätzlich eine Backup-Kopie an Supabase.
 
 ## API-Konfiguration
 
@@ -70,26 +70,37 @@ Die Formularfelder werden gemäß der [kreativ.management Dokumentation](https:/
 - `knownby`: Automatisch auf "Landing Page /lp/hochzeit" gesetzt
 - `notes`: Enthält Metadaten (Zeitstempel, Location, Hochzeitsdatum)
 
-## Formular-Component
+## Formular-Components
 
-Das Formular-Component befindet sich in:
+### Landing Page Formular
 - `src/components/shared/LandingPageContactForm.tsx`
+- Verwendet: `/api/contact/kreativ-management`
+- Felder: firstname, lastname, email, telephone, weddingdate, location, message
 
-Es verwendet:
-- React Hooks für State Management
-- Tracking für Conversion-Analyse
-- Success/Error States
-- Responsive Design
+### Startseiten Formular
+- `src/components/homepage/ContactSection.tsx`
+- Verwendet: `/api/contact`
+- Felder: name (wird in firstname/lastname aufgeteilt), email, phone, wedding_date, location, message, service_type
 
-## API-Route
+## API-Routes
 
-Die API-Route befindet sich in:
+### Landing Page API
 - `src/app/api/contact/kreativ-management/route.ts`
+- Sendet nur an kreativ.management API
+
+### Startseiten API
+- `src/app/api/contact/route.ts`
+- Sendet an kreativ.management API (primär)
+- Speichert zusätzlich in Supabase als Backup/Archive
+- Name wird automatisch in firstname/lastname aufgeteilt
+- Wedding date wird von YYYY-MM-DD zu dd.MM.yyyy HH:mm formatiert
 
 **Funktionen:**
 - Validierung der erforderlichen Felder
 - Mapping der Formulardaten zu kreativ.management Format
-- Fehlerbehandlung
+- Name-Splitting (Vollname → Vorname/Nachname)
+- Datumsformatierung für kreativ.management
+- Fehlerbehandlung mit Fallback
 - Logging für Debugging
 
 ## Testing
