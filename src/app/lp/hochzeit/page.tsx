@@ -6,7 +6,7 @@ import type { Wedding } from '@/lib/supabase';
 import { getImageUrl, defaultBlurDataURL, formatDate } from '@/lib/utils';
 import SchemaOrg from '@/components/shared/SchemaOrg';
 import ScrollRevealWrapper from '@/components/shared/ScrollRevealWrapper';
-import KreativManagementForm from '@/components/shared/KreativManagementForm';
+import LandingPageContactForm from '@/components/shared/LandingPageContactForm';
 
 export const metadata: Metadata = {
   title: 'Hochzeitsfotograf Oberösterreich 2026 | Jetzt Wunschtermin sichern',
@@ -395,12 +395,9 @@ export default async function LandingPageHochzeit() {
                   </p>
                 </div>
 
-                {/* External Form Container */}
+                {/* Contact Form Container */}
                 <div className="glass-card rounded-3xl p-8 md:p-12 reveal">
-                  <KreativManagementForm 
-                    formId="472b1e77-ff01-486e-91c4-02ca208351ec"
-                    theme="default"
-                  />
+                  <LandingPageContactForm />
                 </div>
 
                 {/* Trust Signals */}
