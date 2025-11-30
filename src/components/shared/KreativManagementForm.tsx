@@ -15,6 +15,7 @@ export default function KreativManagementForm({
 }: KreativManagementFormProps) {
   const formElementRef = useRef<HTMLDivElement>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const scriptLoadedRef = useRef(false);
 
   useEffect(() => {
     // Mark as mounted to ensure element is in DOM
@@ -25,22 +26,62 @@ export default function KreativManagementForm({
     // Only run in browser and after mount
     if (typeof window === 'undefined' || !isMounted || !formElementRef.current) return;
 
+    const formElement = formElementRef.current;
+
+    // Function to check if form is initialized
+    const isFormInitialized = () => {
+      if (!formElement) return false;
+      // Check if form has content (form, iframe, or any child elements added by the script)
+      const hasContent = formElement.children.length > 0 || 
+                       formElement.querySelector('form, iframe, [class*="form"], [id*="form"]');
+      return !!hasContent;
+    };
+
+    // Function to try initializing the form
+    const tryInitializeForm = () => {
+      if (!formElement || isFormInitialized()) return true;
+
+      console.log('Attempting to initialize kreativ.management form...');
+
+      // Method 1: Check for global initialization function
+      if ((window as any).kreativManagementFormWidget) {
+        console.log('Found kreativManagementFormWidget, attempting manual init');
+        try {
+          if (typeof (window as any).kreativManagementFormWidget.init === 'function') {
+            (window as any).kreativManagementFormWidget.init();
+          }
+        } catch (e) {
+          console.warn('Manual init failed:', e);
+        }
+      }
+
+      // Method 2: Dispatch DOMContentLoaded event (some scripts listen to this)
+      window.dispatchEvent(new Event('DOMContentLoaded'));
+
+      // Method 3: Try MutationObserver to detect when form is added
+      // This is a fallback - the script should handle it automatically
+
+      return isFormInitialized();
+    };
+
     // Check if script is already loaded
     const existingScript = document.querySelector('script[src*="kreativ.management"]');
-    if (existingScript) {
-      console.log('kreativ.management script already loaded');
-      // If script is already loaded, it should have already initialized forms
-      // But we can try to trigger re-initialization
+    
+    if (existingScript && scriptLoadedRef.current) {
+      console.log('kreativ.management script already loaded, trying to initialize');
+      // Script exists, try to initialize
       setTimeout(() => {
-        // Dispatch a custom event to trigger form initialization
-        window.dispatchEvent(new Event('DOMContentLoaded'));
-      }, 100);
+        if (!tryInitializeForm()) {
+          // If not initialized, try again after delays
+          setTimeout(() => tryInitializeForm(), 500);
+          setTimeout(() => tryInitializeForm(), 1500);
+        }
+      }, 200);
       return;
     }
 
-    // Wait a bit to ensure DOM is ready
-    const timer = setTimeout(() => {
-      // Load script dynamically
+    // Load script dynamically if not already loaded
+    if (!existingScript) {
       const script = document.createElement('script');
       script.src = 'https://api.kreativ.management/Form/GetContactFormWidget';
       script.async = true;
@@ -48,18 +89,19 @@ export default function KreativManagementForm({
       
       script.onload = () => {
         console.log('kreativ.management form script loaded');
-        // Script should automatically find and initialize .js-hm-form elements
-        // Give it a moment to process
+        scriptLoadedRef.current = true;
+        
+        // Wait for script to process, then try to initialize
         setTimeout(() => {
-          const formElement = formElementRef.current;
-          if (formElement && !formElement.querySelector('form, iframe')) {
-            console.warn('Form element found but not initialized. Checking for manual init...');
-            // Try to trigger initialization manually if needed
-            if ((window as any).kreativManagementFormWidget) {
-              console.log('Found kreativManagementFormWidget, attempting manual init');
-            }
+          if (!tryInitializeForm()) {
+            // Retry with increasing delays
+            setTimeout(() => {
+              if (!tryInitializeForm()) {
+                setTimeout(() => tryInitializeForm(), 1000);
+              }
+            }, 500);
           }
-        }, 500);
+        }, 300);
       };
 
       script.onerror = (error) => {
@@ -68,12 +110,35 @@ export default function KreativManagementForm({
 
       // Append script to document head
       document.head.appendChild(script);
-    }, 100);
+    } else {
+      // Script exists but might not be loaded yet
+      scriptLoadedRef.current = true;
+      setTimeout(() => {
+        tryInitializeForm();
+      }, 500);
+    }
+
+    // Set up MutationObserver to detect when form is initialized
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.addedNodes.length > 0 && isFormInitialized()) {
+          console.log('Form initialized successfully!');
+          observer.disconnect();
+        }
+      });
+    });
+
+    if (formElement) {
+      observer.observe(formElement, {
+        childList: true,
+        subtree: true,
+      });
+    }
 
     return () => {
-      clearTimeout(timer);
+      observer.disconnect();
     };
-  }, [isMounted]);
+  }, [isMounted, formId]);
 
   return (
     <div className={className}>
@@ -87,4 +152,3 @@ export default function KreativManagementForm({
     </div>
   );
 }
-
