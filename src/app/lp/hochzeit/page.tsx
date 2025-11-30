@@ -6,6 +6,7 @@ import type { Wedding } from '@/lib/supabase';
 import { getImageUrl, defaultBlurDataURL, formatDate } from '@/lib/utils';
 import SchemaOrg from '@/components/shared/SchemaOrg';
 import ScrollRevealWrapper from '@/components/shared/ScrollRevealWrapper';
+import TrackingProvider from '@/components/shared/TrackingProvider';
 import LandingPageContactForm from '@/components/shared/LandingPageContactForm';
 
 export const metadata: Metadata = {
@@ -65,7 +66,7 @@ export default async function LandingPageHochzeit() {
   };
 
   return (
-    <>
+    <TrackingProvider>
       <SchemaOrg data={schemaData} />
       
       <main className="min-h-screen bg-dark-background">
@@ -448,7 +449,7 @@ export default async function LandingPageHochzeit() {
           </section>
         </ScrollRevealWrapper>
       </main>
-    </>
+    </TrackingProvider>
   );
 }
 
