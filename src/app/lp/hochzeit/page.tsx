@@ -6,8 +6,7 @@ import type { Wedding } from '@/lib/supabase';
 import { getImageUrl, defaultBlurDataURL, formatDate } from '@/lib/utils';
 import SchemaOrg from '@/components/shared/SchemaOrg';
 import ScrollRevealWrapper from '@/components/shared/ScrollRevealWrapper';
-import ExternalContactForm from '@/components/shared/ExternalContactForm';
-import Script from 'next/script';
+import KreativManagementForm from '@/components/shared/KreativManagementForm';
 
 export const metadata: Metadata = {
   title: 'Hochzeitsfotograf Oberösterreich 2026 | Jetzt Wunschtermin sichern',
@@ -398,11 +397,9 @@ export default async function LandingPageHochzeit() {
 
                 {/* External Form Container */}
                 <div className="glass-card rounded-3xl p-8 md:p-12 reveal">
-                  <div 
-                    className="js-hm-form" 
-                    id="kreativmanagement" 
-                    data-theme="default" 
-                    data-form-id="472b1e77-ff01-486e-91c4-02ca208351ec"
+                  <KreativManagementForm 
+                    formId="472b1e77-ff01-486e-91c4-02ca208351ec"
+                    theme="default"
                   />
                 </div>
 
@@ -454,18 +451,6 @@ export default async function LandingPageHochzeit() {
           </section>
         </ScrollRevealWrapper>
       </main>
-
-      {/* External Form Script */}
-      <Script
-        src="https://api.kreativ.management/Form/GetContactFormWidget"
-        strategy="lazyOnload"
-        onLoad={() => {
-          console.log('kreativ.management form script loaded');
-        }}
-        onError={(e) => {
-          console.error('Error loading kreativ.management form script:', e);
-        }}
-      />
     </>
   );
 }
