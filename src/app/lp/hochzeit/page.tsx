@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
-import { Heart, Calendar, MapPin, Camera, CheckCircle2, Star, Award, Phone, Mail } from 'lucide-react';
+import { Heart, Calendar, MapPin, Camera, CheckCircle2, Star, Award, Phone, Mail, ZoomIn } from 'lucide-react';
 import { createServerSupabaseClient } from '@/lib/auth-server';
 import type { Wedding } from '@/lib/supabase';
 import { getImageUrl, defaultBlurDataURL, formatDate } from '@/lib/utils';
@@ -8,6 +8,7 @@ import SchemaOrg from '@/components/shared/SchemaOrg';
 import ScrollRevealWrapper from '@/components/shared/ScrollRevealWrapper';
 import TrackingProvider from '@/components/shared/TrackingProvider';
 import LandingPageContactForm from '@/components/shared/LandingPageContactForm';
+import LandingPagePortfolioGallery from '@/components/shared/LandingPagePortfolioGallery';
 
 export const metadata: Metadata = {
   title: 'Hochzeitsfotograf Oberösterreich 2026 | Jetzt Wunschtermin sichern',
@@ -112,10 +113,10 @@ export default async function LandingPageHochzeit() {
             <div className="container mx-auto px-4 md:px-6 relative z-10 text-center">
               <div className="reveal max-w-4xl mx-auto">
                 {/* Urgency Badge */}
-                <div className="inline-flex items-center space-x-2 bg-red-500/20 border border-red-500/50 rounded-full px-6 py-3 mb-8 animate-pulse">
-                  <Calendar className="w-5 h-5 text-red-400" />
+                <div className="inline-flex items-center space-x-2 bg-gold/20 border border-gold/50 rounded-full px-6 py-3 mb-8">
+                  <Calendar className="w-5 h-5 text-gold" />
                   <span className="text-white font-semibold">
-                    2026 bereits ausgebucht – jetzt für 2027 anfragen
+                    Jetzt für 2026 Wunschtermin sichern – noch wenige Termine verfügbar
                   </span>
                 </div>
 
@@ -306,7 +307,7 @@ export default async function LandingPageHochzeit() {
             </div>
           </section>
 
-          {/* Portfolio Section - Reduced */}
+          {/* Portfolio Section - With Lightbox */}
           <section className="py-20 md:py-32 bg-gradient-to-b from-dark-background to-black">
             <div className="container mx-auto px-4 md:px-6">
               <div className="text-center mb-12 reveal">
@@ -319,29 +320,8 @@ export default async function LandingPageHochzeit() {
                 </p>
               </div>
 
-              {/* Portfolio Grid - Using LP Images */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto reveal">
-                {LP_IMAGES.portfolio.slice(0, 9).map((imageUrl, index) => (
-                  <div
-                    key={index}
-                    className="glass-card rounded-2xl overflow-hidden hover:scale-[1.02] transition-all duration-500 group"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    <div className="relative h-64 overflow-hidden">
-                      <Image
-                        src={imageUrl}
-                        alt={`Hochzeitsbild ${index + 1}`}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                        placeholder="blur"
-                        blurDataURL={defaultBlurDataURL}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              {/* Portfolio Gallery with Lightbox */}
+              <LandingPagePortfolioGallery images={LP_IMAGES.portfolio} />
 
               {/* CTA */}
               <div className="text-center mt-12 reveal">
